@@ -296,22 +296,24 @@ void ofShader::unload() {
 
 //--------------------------------------------------------------
 void ofShader::begin() {
-	if (bLoaded == true)
+	if (bLoaded == true){
 		glUseProgram(program);
     
-#ifdef OPENGLES_VERSION_2
-	ofGetGLES2Renderer()->beginCustomShader(this);
-#endif
+		#ifdef OPENGLES_VERSION_2
+			ofGetGLES2Renderer()->beginCustomShader(this);
+		#endif
+	}
 }
 
 //--------------------------------------------------------------
 void ofShader::end() {
-	if (bLoaded == true)
+	if (bLoaded == true){
 		glUseProgram(0);
     
-#ifdef OPENGLES_VERSION_2
-	ofGetGLES2Renderer()->endCustomShader();
-#endif
+		#ifdef OPENGLES_VERSION_2
+			ofGetGLES2Renderer()->endCustomShader();
+		#endif
+	}
 }
 
 //--------------------------------------------------------------

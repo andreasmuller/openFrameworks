@@ -31,7 +31,7 @@ using namespace OpenGLES::OpenGLES2;
 
 OpenGLES20Context::OpenGLES20Context() : OpenGLESContext(2, new OpenGLES20Implementation()), matrixStack(&openGLESState, implementation), openGLESState(), shaderProgramId(0)
 {
-	overrideShader = NULL;	
+	overrideShader = 0;
 
 	implementation->init();
 	matrixStack.init();
@@ -317,38 +317,42 @@ void OpenGLES20Context::prepareToDraw()
 		}
 	}
 	
-	if( overrideShader != NULL )
+	if( overrideShader != 0 )
 	{
 		// if we have a override shader, see if they want a modelview matrix and a projection matrix
 		
-		if( overrideShader->getUniformLocation("u_modelViewMatrix") > -1 ) {
-			overrideShader->setUniformMatrix4x4v("u_modelViewMatrix", modelViewMatrix->m );
+		GLint loc = glGetUniformLocation(overrideShader,"u_modelViewMatrix");
+		if(  loc > -1 ) {
+			glUniformMatrix4fv( loc, 1, GL_FALSE, modelViewMatrix->m );
+			//overrideShader->setUniformMatrix4x4v("u_modelViewMatrix", modelViewMatrix->m );
 		}
 		
-		if( overrideShader->getUniformLocation("u_projectionMatrix") > -1 ) {
-			overrideShader->setUniformMatrix4x4v("u_projectionMatrix", projectionMatrix->m );		
+		loc = glGetUniformLocation(overrideShader,"u_projectionMatrix");
+		if( loc > -1 ) {
+			glUniformMatrix4fv( loc, 1, GL_FALSE, projectionMatrix->m );
 		}
 		
-		if( overrideShader->getUniformLocation("u_modelViewProjectionMatrix") > -1 ) {
-			overrideShader->setUniformMatrix4x4v("u_modelViewProjectionMatrix", mvp.m );			
+		loc = glGetUniformLocation(overrideShader,"u_modelViewProjectionMatrix");
+		if( loc > -1 ) {
+			glUniformMatrix4fv( loc, 1, GL_FALSE, mvp.m );
 		}		
 		
 		if ( openGLESState.attributes[AttributeId::POSITION]->enabled ){
-			GLint attributeLocation = overrideShader->getAttributeLocation("a_position"); 
+			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_position");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::POSITION]->setVertexAttribPointer( attributeLocation );
 			}
 		}
 		
 		if ( openGLESState.attributes[AttributeId::COLOR]->enabled ){
-			GLint attributeLocation = overrideShader->getAttributeLocation("a_color"); 
+			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_color");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::COLOR]->setVertexAttribPointer( attributeLocation );
 			}
 		}
 		
 		if ( openGLESState.attributes[AttributeId::NORMAL]->enabled ){
-			GLint attributeLocation = overrideShader->getAttributeLocation("a_normal"); 
+			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_normal");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::NORMAL]->setVertexAttribPointer( attributeLocation );
 			}			
@@ -356,21 +360,21 @@ void OpenGLES20Context::prepareToDraw()
 		
 		
 		if ( openGLESState.attributes[AttributeId::TEXCOORD0]->enabled ){
-			GLint attributeLocation = overrideShader->getAttributeLocation("a_texCoord0"); 
+			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_texCoord0");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::TEXCOORD0]->setVertexAttribPointer( attributeLocation );
 			}			
 		}		
 		
 		if ( openGLESState.attributes[AttributeId::TEXCOORD1]->enabled ){
-			GLint attributeLocation = overrideShader->getAttributeLocation("a_texCoord1"); 
+			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_texCoord1");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::TEXCOORD1]->setVertexAttribPointer( attributeLocation );
 			}			
 		}		
 		
 		if ( openGLESState.attributes[AttributeId::TEXCOORD2]->enabled ){
-			GLint attributeLocation = overrideShader->getAttributeLocation("a_texCoord2"); 
+			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_texCoord2");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::TEXCOORD2]->setVertexAttribPointer( attributeLocation );
 			}			

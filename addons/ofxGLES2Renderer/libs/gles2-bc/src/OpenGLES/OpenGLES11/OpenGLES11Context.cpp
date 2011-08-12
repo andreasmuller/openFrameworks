@@ -18,10 +18,10 @@
 #include "OpenGLESUtil.h"
 #include "OpenGLES11Implementation.h"
 
-#if TARGET_OS_IPHONE
+#ifndef __ANDROID__
 	#include <OpenGLES/ES1/gl.h>
 	#include <OpenGLES/ES1/glext.h>
-#elif defined __ANDROID__
+#else
 	#include <GLES/gl.h>
 	#include <GLES/glext.h>
 #endif

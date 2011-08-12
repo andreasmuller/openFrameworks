@@ -19,12 +19,9 @@
 
 #include "OpenGLESImplementation.h"
 
-#include "ofShader.h"
 //#include "OpenGLESMath.h"
 
 #include "OpenGLESDefines.h"
-
-class ofShader;
 
 /*************************************************************/
 
@@ -350,7 +347,7 @@ namespace OpenGLES {
 		virtual GLfloat* getProjectionMatrix()=0;
 		//virtual GLfloat* getTextureMatrix(int index)=0;
 		
-		ofShader* overrideShader;
+		GLuint overrideShader;
 			
 		
 	protected:

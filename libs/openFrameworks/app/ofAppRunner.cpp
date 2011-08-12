@@ -9,7 +9,12 @@
 #include "ofEvents.h"
 #include "ofMath.h"
 #include "ofGraphics.h"
-#include "ofGLRenderer.h"
+
+#ifndef OPENGLES_VERSION_2
+	#include "ofGLRenderer.h"
+#else
+	#include "ofGLES2Renderer.h"
+#endif
 
 // TODO: closing seems wonky. 
 // adding this for vc2010 compile: error C3861: 'closeQuicktime': identifier not found
@@ -101,7 +106,12 @@ void ofSetupOpenGL(ofPtr<ofAppBaseWindow> windowPtr, int w, int h, int screenMod
 		ofLog(OF_LOG_ERROR, "Error: %s\n", glewGetErrorString(err));
 	}
 #endif
+
+#ifndef OPENGLES_VERSION_2
 	ofSetCurrentRenderer(ofPtr<ofBaseRenderer>(new ofGLRenderer(false)));
+#else
+	ofSetCurrentRenderer(ofPtr<ofBaseRenderer>(new ofGLES2Renderer()));
+#endif
 	//Default colors etc are now in ofGraphics - ofSetupGraphicDefaults
 	//ofSetupGraphicDefaults();
 }

@@ -14,17 +14,30 @@
  limitations under the License.
  */
 
-#include "OpenGLESConfig.h"
+#ifndef ShaderFile_H_
+#define ShaderFile_H_
 
-using namespace OpenGLES;
 
-#define OPENGLES_DEBUG
-
-const bool OpenGLESConfig::USE_ONLY_UBER_SHADER = false;
-#ifdef OPENGLES_DEBUG
-const bool OpenGLESConfig::DEBUG = true;
+#ifndef __ANDROID__
+#include <OpenGLES/ES2/gl.h>
 #else
-const bool OpenGLESConfig::DEBUG = false;
+#include <GLES2/gl2.h>
 #endif
+#include <string>
+#include "../OpenGLESFile.h"
 
-// TODO: read from file
+namespace OpenGLES {
+	namespace OpenGLES2 {
+		
+		class ShaderFile : public OpenGLESFile {
+		public:
+			ShaderFile(GLenum type, std::string name);
+			GLenum getType();
+			void setType(GLenum type);
+		private:
+			GLenum type;
+		};
+	}
+}
+
+#endif

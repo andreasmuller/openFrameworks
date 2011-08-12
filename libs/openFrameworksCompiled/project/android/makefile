@@ -79,6 +79,7 @@ INCLUDES_FLAGS += -I../../../poco/include
 ifeq ($(ARCH),android)
 	INCLUDES_FLAGS += -I../../../glu/include_android
  	INCLUDES_FLAGS += -I../../../../addons/ofxAndroid/src
+ 	INCLUDES_FLAGS += -I../../../../addons/ofxGLES2Renderer/src
 else
  	INCLUDES_FLAGS += -I../../../glu/include
 endif
@@ -115,7 +116,7 @@ ifeq ($(findstring Release,$(MAKECMDGOALS)),Release)
 endif
 
 ifeq ($(findstring Release_arm7,$(MAKECMDGOALS)),Release_arm7)
-	TARGET_CFLAGS += -march=armv7-a -mfloat-abi=softfp -mthumb
+	TARGET_CFLAGS += -march=armv7-a -mfloat-abi=softfp 
 	TARGET = ../../lib/$(LIBSPATH)/libopenFrameworks_arm7.a
 endif
 

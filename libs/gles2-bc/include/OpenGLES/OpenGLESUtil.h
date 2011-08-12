@@ -17,6 +17,9 @@
 #ifndef OpenGLESUtil_H_
 #define OpenGLESUtil_H_
 
+#define OPENGLES_DEBUG
+#include "OpenGLESConfig.h"
+
 #ifdef OPENGLES_DEBUG
 #define CHECK_GL_ERROR(X, Y, Z) OpenGLESUtil::checkGlError(X, Y, Z)
 #define LOG_DEBUG_MESSAGE(...) OpenGLESUtil::logMessage(__VA_ARGS__)
@@ -29,7 +32,7 @@
 #define PRINT_BITS(X)
 #endif
 
-#define LOG_MESSAGE(...) if (OpenGLESConfig::DEBUG) { OpenGLESUtil::logMessage(__VA_ARGS__); }
+#define LOG_MESSAGE(...) if (OpenGLES::OpenGLESConfig::DEBUG) { OpenGLESUtil::logMessage(__VA_ARGS__); }
 
 #include "OpenGLESContext.h"
 #include "OpenGLESString.h"

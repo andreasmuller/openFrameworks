@@ -15,7 +15,6 @@
  */
 
 #include "OpenGLESString.h"
-#include <sstream>
 
 using namespace OpenGLES;
 
@@ -49,41 +48,6 @@ OpenGLESString OpenGLESString::operator+ (std::string val)
 OpenGLESString OpenGLESString::operator+ (OpenGLESString val)
 {
 	return OpenGLESString(string + val());
-}
-
-OpenGLESString OpenGLESString::operator+ (int val)
-{
-	std::stringstream out;
-	out << val;
-	return OpenGLESString(string + out.str());
-}
-
-OpenGLESString OpenGLESString::operator+ (size_t val)
-{
-	std::stringstream out;
-	out << (int)val;
-	return OpenGLESString(string + out.str());
-}
-
-OpenGLESString OpenGLESString::operator+ (unsigned int val)
-{
-	std::stringstream out;
-	out << val;
-	return OpenGLESString(string + out.str());
-}
-
-OpenGLESString OpenGLESString::operator+ (float val)
-{
-	std::stringstream out;
-	out << val;
-	return OpenGLESString(string + out.str());
-}
-
-OpenGLESString OpenGLESString::operator+ (double val)
-{
-	std::stringstream out;
-	out << val;
-	return OpenGLESString(string + out.str());
 }
 
 std::string OpenGLESString::operator()()

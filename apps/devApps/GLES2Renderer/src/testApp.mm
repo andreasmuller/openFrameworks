@@ -1,14 +1,11 @@
 
 #include "testApp.h"
 
-
-static ofPtr<ofGLES2Renderer> gles2Renderer;
-
 //--------------------------------------------------------------
 void testApp::setup()
 {
 	//ofSetLogLevel( OF_LOG_NOTICE );
-	ofSetLogLevel( OF_LOG_VERBOSE );	
+	ofSetLogLevel( OF_LOG_VERBOSE );
 		
 	int overrideGLVersion = 2;
 #ifndef OPENGLES_VERSION_2
@@ -17,8 +14,8 @@ void testApp::setup()
 	
 	//ofSetCurrentRenderer(ofPtr<ofBaseRenderer>(new ofGLES2Renderer(overrideGLVersion)));
 	
-	gles2Renderer = ofPtr<ofGLES2Renderer>( new ofGLES2Renderer(overrideGLVersion) );
-	ofSetCurrentRenderer( gles2Renderer );	
+	/*gles2Renderer = ofPtr<ofGLES2Renderer>( new ofGLES2Renderer(overrideGLVersion) );
+	ofSetCurrentRenderer( gles2Renderer );	*/
 	
 	//ofxiPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_RIGHT);
 	
@@ -198,7 +195,7 @@ void testApp::draw()
 	drawScene();
 	
 	// Try a shader
-	gles2Renderer->beginCustomShader( &testShader );
+	testShader.begin();
 	
 	testShader.setUniform1f("u_time", ofGetElapsedTimef() );	
 	
@@ -212,7 +209,7 @@ void testApp::draw()
 	
 	testImage.draw( 100.0f, 100.0f, imageDrawWidth, imageDrawHeight );
 	
-	gles2Renderer->endCustomShader();
+	testShader.end();
 	
 	screenFBO.end();
 	 
@@ -228,13 +225,13 @@ void testApp::draw()
 	drawScene();
 	screenFBO.end();
 	
-	gles2Renderer->beginCustomShader( &testShader );
+	testShader.begin();
 	testShader.setUniform1f("u_time", ofGetElapsedTimef() );
 	ofPushMatrix();
 		ofRotate( 90.0f );
 		screenFBO.draw(0.0f, -768, screenFBO.getWidth(), screenFBO.getHeight() ); 
 	ofPopMatrix(); 
-	gles2Renderer->endCustomShader();
+	testShader.end();
 	
 }
 
@@ -735,30 +732,30 @@ void testApp::drawScene()
 //--------------------------------------------------------------
 void testApp::debugDraw()
 {
-	gles2Renderer->gl->glMatrixMode(GL_PROJECTION); 
+	ofGetGLES2Context()->glMatrixMode(GL_PROJECTION);
     
-	gles2Renderer->gl->glLoadIdentity();
-	gles2Renderer->gl->glOrthof(-1.0f, 1.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	ofGetGLES2Context()->glLoadIdentity();
+	ofGetGLES2Context()->glOrthof(-1.0f, 1.0f, -1.5f, 1.5f, -1.0f, 1.0f);
 	
-	gles2Renderer->gl->glMatrixMode(GL_MODELVIEW);
+	ofGetGLES2Context()->glMatrixMode(GL_MODELVIEW);
     
     // Enable lighting
-	gles2Renderer->gl->glEnable(GL_LIGHTING);
+	ofGetGLES2Context()->glEnable(GL_LIGHTING);
 	
     // Turn the first light on
-	gles2Renderer->gl->glEnable(GL_LIGHT0);
+	ofGetGLES2Context()->glEnable(GL_LIGHT0);
     
     // Define the ambient component of the first light
     static const Color3D light0Ambient[] = {{0.4, 0.4, 0.4, 1.0}};
-	gles2Renderer->gl->glLightfv(GL_LIGHT0, GL_AMBIENT, (const GLfloat *)light0Ambient);
+    ofGetGLES2Context()->glLightfv(GL_LIGHT0, GL_AMBIENT, (const GLfloat *)light0Ambient);
     
     // Define the diffuse component of the first light
     static const Color3D light0Diffuse[] = {{1.0, 1.0, 1.0, 1.0}};
-	gles2Renderer->gl->glLightfv(GL_LIGHT0, GL_DIFFUSE, (const GLfloat *)light0Diffuse);
+    ofGetGLES2Context()->glLightfv(GL_LIGHT0, GL_DIFFUSE, (const GLfloat *)light0Diffuse);
     
     // Define the specular component and shininess of the first light
     static const Color3D light0Specular[] = {{0.7, 0.7, 0.7, 1.0}};
-	gles2Renderer->gl->glLightfv(GL_LIGHT0, GL_SPECULAR, (const GLfloat *)light0Specular);
+    ofGetGLES2Context()->glLightfv(GL_LIGHT0, GL_SPECULAR, (const GLfloat *)light0Specular);
 	
 	// 	float radius = 100.f; 
 	//	float tmpX =  cos(counter*.006f) * radius * 2; 
@@ -771,20 +768,20 @@ void testApp::debugDraw()
 	//   Vertex3D light0Position[] = {{tmpX, tmpY, tmpZ}};	
 	
 
-	gles2Renderer->gl->glLoadIdentity(); 
+    ofGetGLES2Context()->glLoadIdentity();
 	
 	
-	gles2Renderer->gl->glEnable( GL_DEPTH_TEST );	
+    ofGetGLES2Context()->glEnable( GL_DEPTH_TEST );
 	
-	gles2Renderer->gl->glLightfv(GL_LIGHT0, GL_POSITION, (const GLfloat *)light0Position); 	
+    ofGetGLES2Context()->glLightfv(GL_LIGHT0, GL_POSITION, (const GLfloat *)light0Position);
 	
-	gles2Renderer->gl->glRotatef(counter, 0.0f, 0.0f, 1.0f);
-	gles2Renderer->gl->glRotatef(counter / 1.4f, 0.0f, 1.0f, 0.0f);
+    ofGetGLES2Context()->glRotatef(counter, 0.0f, 0.0f, 1.0f);
+    ofGetGLES2Context()->glRotatef(counter / 1.4f, 0.0f, 1.0f, 0.0f);
 	
 	
 	drawIcosahedron( 1.0f );
 	
-	gles2Renderer->gl->glDisable(GL_LIGHTING);
+	ofGetGLES2Context()->glDisable(GL_LIGHTING);
 }
 
 
@@ -841,24 +838,24 @@ void testApp::drawCube( float _scale )
 	
 	int _vertexCount = 36;
 	
-	gles2Renderer->gl->glPushMatrix();
+	ofGetGLES2Context()->glPushMatrix();
 	
-	gles2Renderer->gl->glScalef( _scale, _scale , _scale );
+	ofGetGLES2Context()->glScalef( _scale, _scale , _scale );
 		
-		gles2Renderer->gl->glEnableClientState(GL_VERTEX_ARRAY);
-		gles2Renderer->gl->glEnableClientState(GL_NORMAL_ARRAY);
-		gles2Renderer->gl->glEnableClientState(GL_COLOR_ARRAY);
+	ofGetGLES2Context()->glEnableClientState(GL_VERTEX_ARRAY);
+	ofGetGLES2Context()->glEnableClientState(GL_NORMAL_ARRAY);
+	ofGetGLES2Context()->glEnableClientState(GL_COLOR_ARRAY);
 		
-		gles2Renderer->gl->glVertexPointer(3, GL_FLOAT, 0, _vertices);
-		gles2Renderer->gl->glNormalPointer(GL_FLOAT, 0, _normals);
-		gles2Renderer->gl->glColorPointer(4, GL_FLOAT, 0, _colors);
-		gles2Renderer->gl->glDrawArrays(GL_TRIANGLES, 0, _vertexCount);	
+	ofGetGLES2Context()->glVertexPointer(3, GL_FLOAT, 0, _vertices);
+	ofGetGLES2Context()->glNormalPointer(GL_FLOAT, 0, _normals);
+	ofGetGLES2Context()->glColorPointer(4, GL_FLOAT, 0, _colors);
+	ofGetGLES2Context()->glDrawArrays(GL_TRIANGLES, 0, _vertexCount);
 
-		gles2Renderer->gl->glDisableClientState(GL_VERTEX_ARRAY);
-		gles2Renderer->gl->glDisableClientState(GL_NORMAL_ARRAY);
-		gles2Renderer->gl->glDisableClientState(GL_COLOR_ARRAY);
+	ofGetGLES2Context()->glDisableClientState(GL_VERTEX_ARRAY);
+	ofGetGLES2Context()->glDisableClientState(GL_NORMAL_ARRAY);
+	ofGetGLES2Context()->glDisableClientState(GL_COLOR_ARRAY);
 		
-	gles2Renderer->gl->glPopMatrix();		
+	ofGetGLES2Context()->glPopMatrix();
 	
 }
 
@@ -936,25 +933,25 @@ void testApp::drawIcosahedron( float _scale )
         {0.000000, 0.417775, 0.675973},
     };	
 
-	gles2Renderer->gl->glPushMatrix();
+	ofGetGLES2Context()->glPushMatrix();
 
-		gles2Renderer->gl->glScalef( _scale, _scale , _scale );
+		ofGetGLES2Context()->glScalef( _scale, _scale , _scale );
 		
-		gles2Renderer->gl->glEnableClientState(GL_VERTEX_ARRAY);
-		gles2Renderer->gl->glEnableClientState(GL_COLOR_ARRAY);
-		gles2Renderer->gl->glEnableClientState(GL_NORMAL_ARRAY);
+		ofGetGLES2Context()->glEnableClientState(GL_VERTEX_ARRAY);
+		ofGetGLES2Context()->glEnableClientState(GL_COLOR_ARRAY);
+		ofGetGLES2Context()->glEnableClientState(GL_NORMAL_ARRAY);
 		
-		gles2Renderer->gl->glVertexPointer(3, GL_FLOAT, 0, vertices);
-		gles2Renderer->gl->glColorPointer(4, GL_FLOAT, 0, colors);
-		gles2Renderer->gl->glNormalPointer(GL_FLOAT, 0, normals);
+		ofGetGLES2Context()->glVertexPointer(3, GL_FLOAT, 0, vertices);
+		ofGetGLES2Context()->glColorPointer(4, GL_FLOAT, 0, colors);
+		ofGetGLES2Context()->glNormalPointer(GL_FLOAT, 0, normals);
 		
-		gles2Renderer->gl->glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_BYTE, icosahedronFaces);
+		ofGetGLES2Context()->glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_BYTE, icosahedronFaces);
 		
-		gles2Renderer->gl->glDisableClientState(GL_VERTEX_ARRAY);
-		gles2Renderer->gl->glDisableClientState(GL_COLOR_ARRAY);
-		gles2Renderer->gl->glDisableClientState(GL_NORMAL_ARRAY);
+		ofGetGLES2Context()->glDisableClientState(GL_VERTEX_ARRAY);
+		ofGetGLES2Context()->glDisableClientState(GL_COLOR_ARRAY);
+		ofGetGLES2Context()->glDisableClientState(GL_NORMAL_ARRAY);
 	
-	gles2Renderer->gl->glPopMatrix();	
+	ofGetGLES2Context()->glPopMatrix();
 }
 
 //--------------------------------------------------------------

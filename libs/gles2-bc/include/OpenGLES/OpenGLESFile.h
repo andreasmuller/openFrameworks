@@ -14,25 +14,37 @@
  limitations under the License.
  */
 
-#ifndef ShaderFile_H_
-#define ShaderFile_H_
+#ifndef OpenGLESFile_H_
+#define OpenGLESFile_H_
 
-#include <OpenGLES/ES2/gl.h>
+
+
 #include <string>
-#include "../OpenGLESFile.h"
 
 namespace OpenGLES {
-	namespace OpenGLES2 {
+	
+	class OpenGLESFile {
+	public:
+		OpenGLESFile(std::string name);
 		
-		class ShaderFile : public OpenGLESFile {
-		public:
-			ShaderFile(GLenum type, std::string name);
-			GLenum getType();
-			void setType(GLenum type);
-		private:
-			GLenum type;
-		};
-	}
+#ifdef __ANDROID__
+		static void setBasePath(std::string path);
+#endif
+
+		bool open();
+		char *gets(char * buf, int size);
+		int seek(long int offset, int origin);
+		long int tell();
+		size_t read(void *ptr, size_t size, size_t count);
+		void close();
+		std::string getName();
+		
+	private:
+		std::string name;
+		static std::string base_path;
+		FILE *fp;
+	};
+	
 }
 
 #endif

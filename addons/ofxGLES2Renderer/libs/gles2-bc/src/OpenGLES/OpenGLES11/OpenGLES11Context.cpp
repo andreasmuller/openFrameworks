@@ -17,8 +17,14 @@
 #include "OpenGLES11Context.h"
 #include "OpenGLESUtil.h"
 #include "OpenGLES11Implementation.h"
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
+
+#if TARGET_OS_IPHONE
+	#include <OpenGLES/ES1/gl.h>
+	#include <OpenGLES/ES1/glext.h>
+#elif defined __ANDROID__
+	#include <GLES/gl.h>
+	#include <GLES/glext.h>
+#endif
 
 using namespace OpenGLES::OpenGLES1;
 
@@ -738,50 +744,66 @@ void OpenGLES11Context::glDeleteBuffers (GLsizei n, const GLuint *buffers)
 
 void OpenGLES11Context::glDrawTexsOES (GLshort x, GLshort y, GLshort z, GLshort width, GLshort height)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexsOES(x, y, z, width, height);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexiOES (GLint x, GLint y, GLint z, GLint width, GLint height)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexiOES(x, y, z, width, height);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexxOES (GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLfixed height)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexxOES(x, y, z, width, height);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexsvOES (const GLshort *coords)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexsvOES(coords);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexivOES (const GLint *coords)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexivOES(coords);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexxvOES (const GLfixed *coords) 
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexxvOES(coords);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexfOES (GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexfOES(x, y, z, width, height);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glDrawTexfvOES (const GLfloat *coords)
 {
+#if TARGET_OS_IPHONE
 	::glDrawTexfvOES(coords);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glGenBuffers (GLsizei n, GLuint *buffers)
@@ -966,32 +988,42 @@ void OpenGLES11Context::glTexParameteriv (GLenum target, GLenum pname, const GLi
 
 void OpenGLES11Context::glCurrentPaletteMatrixOES (GLuint matrixpaletteindex)
 {
+#ifdef TARGET_OS_IPHONE
 	::glCurrentPaletteMatrixOES(matrixpaletteindex);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glLoadPaletteFromModelViewMatrixOES (void)
 {
+#ifdef TARGET_OS_IPHONE
 	::glLoadPaletteFromModelViewMatrixOES();
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glMatrixIndexPointerOES (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer)
 {
+#ifdef TARGET_OS_IPHONE
 	::glMatrixIndexPointerOES(size, type, stride, pointer);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glWeightPointerOES (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer)
 {
+#ifdef TARGET_OS_IPHONE
 	::glWeightPointerOES(size, type, stride, pointer);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glPointSizePointerOES (GLenum type, GLsizei stride, const GLvoid *pointer)
 {
+#ifdef TARGET_OS_IPHONE
 	::glPointSizePointerOES(type, stride, pointer);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 void OpenGLES11Context::glAttachShader (GLuint program, GLuint shader)
@@ -1457,18 +1489,28 @@ void OpenGLES11Context::glVertexAttribPointer (GLuint indx, GLint size, GLenum t
 // OpenGL ES 1/2 Extensions
 void OpenGLES11Context::glGetBufferPointervOES (GLenum target, GLenum pname, GLvoid **params)
 {
+#if TARGET_OS_IPHONE
 	::glGetBufferPointervOES(target, pname, params);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
+#endif
 }
 
 GLvoid * OpenGLES11Context::glMapBufferOES (GLenum target, GLenum access)
 {
+#if TARGET_OS_IPHONE
 	return ::glMapBufferOES(target, access);
+#else
+	return 0;
+#endif
 }
 
 GLboolean OpenGLES11Context::glUnmapBufferOES (GLenum target)
 {
+#if TARGET_OS_IPHONE
 	return ::glUnmapBufferOES(target);
+#else
+	return 0;
+#endif
 }
 
 // Andreas: We need accessors to these matrices

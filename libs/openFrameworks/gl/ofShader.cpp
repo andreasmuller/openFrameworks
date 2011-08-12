@@ -1,17 +1,11 @@
 #include "ofShader.h"
 #include "ofUtils.h"
 #include "ofFileUtils.h"
+#include "ofGraphics.h"
 #include <map>
 
 //#ifndef TARGET_OPENGLES
-#if (defined (TARGET_OPENGLES) && defined (OPENGLES_VERSION_2)) || ! defined (TARGET_OPENGLES)
-
-
-#ifdef OPENGLES_VERSION_2
-
-#else
-
-#endif 
+#if !defined (TARGET_OPENGLES) || defined (OPENGLES_VERSION_2)
 
 
 
@@ -196,12 +190,19 @@ bool ofShader::checkShaderLinkStatus(GLuint shader, GLenum type) {
 void ofShader::checkShaderInfoLog(GLuint shader, GLenum type) {
 	GLsizei infoLength;
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLength);
+
+#ifndef TARGET_ANDROID
 	if (infoLength > 1) {
 		GLchar* infoBuffer = new GLchar[infoLength];
 		glGetShaderInfoLog(shader, infoLength, &infoLength, infoBuffer);
 		ofLog(OF_LOG_ERROR, nameForType(type) + " shader reports:\n" + infoBuffer);
 		delete [] infoBuffer;
 	}
+#else
+	GLchar infoBuffer[4096];
+	glGetShaderInfoLog(shader, 4096, &infoLength, infoBuffer);
+	ofLog(OF_LOG_ERROR, nameForType(type) + " shader reports:\n" + infoBuffer);
+#endif
 }
 
 //--------------------------------------------------------------
@@ -297,12 +298,20 @@ void ofShader::unload() {
 void ofShader::begin() {
 	if (bLoaded == true)
 		glUseProgram(program);
+    
+#ifdef OPENGLES_VERSION_2
+	ofGetGLES2Renderer()->beginCustomShader(this);
+#endif
 }
 
 //--------------------------------------------------------------
 void ofShader::end() {
 	if (bLoaded == true)
 		glUseProgram(0);
+    
+#ifdef OPENGLES_VERSION_2
+	ofGetGLES2Renderer()->endCustomShader();
+#endif
 }
 
 //--------------------------------------------------------------
@@ -314,12 +323,21 @@ void ofShader::setUniformTexture(const char* name, ofBaseHasTexture& img, int te
 void ofShader::setUniformTexture(const char* name, ofTexture& tex, int textureLocation) {
 	if(bLoaded) {
 		ofTextureData texData = tex.getTextureData();
-		_ofActiveTexture(GL_TEXTURE0 + textureLocation);
-		_ofEnable(texData.textureTarget);
-		_ofBindTexture(texData.textureTarget, texData.textureID);
-		_ofDisable(texData.textureTarget);
+#ifndef OPENGLES_VERSION_2
+		glActiveTexture(GL_TEXTURE0 + textureLocation);
+		glEnable(texData.textureTarget);
+		glBindTexture(texData.textureTarget, texData.textureID);
+		glDisable(texData.textureTarget);
 		setUniform1i(name, textureLocation);
-		_ofActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);
+#else
+		ofGetGLES2Context()->glActiveTexture(GL_TEXTURE0 + textureLocation);
+		ofGetGLES2Context()->glEnable(texData.textureTarget);
+		ofGetGLES2Context()->glBindTexture(texData.textureTarget, texData.textureID);
+		ofGetGLES2Context()->glDisable(texData.textureTarget);
+		setUniform1i(name, textureLocation);
+		ofGetGLES2Context()->glActiveTexture(GL_TEXTURE0);
+#endif
 	}
 }
 

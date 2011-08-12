@@ -17,7 +17,12 @@
 #ifndef Attribute_H_
 #define Attribute_H_
 
-#include <OpenGLES/ES2/gl.h>
+
+#ifndef __ANDROID__
+	#include <OpenGLES/ES2/gl.h>
+#else
+	#include <GLES2/gl2.h>
+#endif
 #include <string>
 
 namespace OpenGLES {

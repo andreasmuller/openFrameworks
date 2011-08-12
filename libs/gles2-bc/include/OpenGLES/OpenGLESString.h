@@ -18,6 +18,7 @@
 #define OpenGLESString_H_
 
 #include <string>
+#include <sstream>
 
 namespace OpenGLES {
 	
@@ -30,11 +31,16 @@ namespace OpenGLES {
 		OpenGLESString operator+ (const char *val);
 		OpenGLESString operator+ (std::string val);
 		OpenGLESString operator+ (OpenGLESString val);
-		OpenGLESString operator+ (size_t val);
-		OpenGLESString operator+ (int val);
-		OpenGLESString operator+ (unsigned int val);
-		OpenGLESString operator+ (float val);
-		OpenGLESString operator+ (double val);
+
+		template<typename T>
+		OpenGLESString operator+ (T val)
+		{
+			std::stringstream out;
+			out << val;
+			return OpenGLESString(string + out.str());
+		}
+
+
 		std::string operator()();
 	private:
 		std::string string;

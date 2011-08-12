@@ -48,8 +48,9 @@ typedef int             GLclampx;
 //typedef int             GLintptr;
 //typedef int             GLsizeiptr;
 
-typedef long             GLintptr;
-typedef long             GLsizeiptr;
+// this is conflicting with GLES2/gl.h in xcode4
+//typedef long             GLintptr;
+//typedef long             GLsizeiptr;
 
 /* Extensions */
 #define GL_OES_byte_coordinates           1

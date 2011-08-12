@@ -1,4 +1,6 @@
 #include "ofGLRenderer.h"
+#include "ofConstants.h"
+#ifndef OPENGLES_VERSION_2
 #include "ofMesh.h"
 #include "ofPath.h"
 #include "ofGraphics.h"
@@ -1172,4 +1174,4 @@ void ofGLRenderer::_texEnvf(unsigned int target, unsigned int pname, unsigned in
 	glTexEnvf( target, pname, param );
 }
 
-
+#endif

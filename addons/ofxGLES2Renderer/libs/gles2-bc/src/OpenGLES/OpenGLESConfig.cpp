@@ -14,32 +14,17 @@
  limitations under the License.
  */
 
-#ifndef OpenGLESFile_H_
-#define OpenGLESFile_H_
+#include "OpenGLESConfig.h"
+
+using namespace OpenGLES;
 
 
 
-#include <string>
-
-namespace OpenGLES {
-	
-	class OpenGLESFile {
-	public:
-		OpenGLESFile(std::string name);
-		
-		bool open();
-		char *gets(char * buf, int size);
-		int seek(long int offset, int origin);
-		long int tell();
-		size_t read(void *ptr, size_t size, size_t count);
-		void close();
-		std::string getName();
-		
-	private:
-		std::string name;
-		FILE *fp;
-	};
-	
-}
-
+const bool OpenGLESConfig::USE_ONLY_UBER_SHADER = false;
+#ifdef OPENGLES_DEBUG
+const bool OpenGLESConfig::DEBUG = true;
+#else
+const bool OpenGLESConfig::DEBUG = false;
 #endif
+
+// TODO: read from file

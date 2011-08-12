@@ -81,6 +81,21 @@ ofPtr<ofGLRenderer> ofGetGLRenderer(){
 	}
 }
 
+#ifdef OPENGLES_VERSION_2
+ofPtr<ofGLES2Renderer> ofGetGLES2Renderer(){
+	if(ofGetCurrentRenderer()->getType()=="GLES2"){
+		return (ofPtr<ofGLES2Renderer>&)ofGetCurrentRenderer();
+	}else{
+		return ofPtr<ofGLES2Renderer>();
+	}
+}
+
+OpenGLES::OpenGLESContext * ofGetGLES2Context(){
+	ofPtr<ofGLES2Renderer> renderer = ofGetGLES2Renderer();
+	if(renderer) return renderer->gl;
+	else return NULL;
+}
+#endif
 #ifndef TARGET_OPENGLES 
 
 //-----------------------------------------------------------------------------------

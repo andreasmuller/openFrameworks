@@ -6,6 +6,7 @@
 
 #include "ofVbo.h"
 #include "ofUtils.h"
+#include "ofGraphics.h"
 #include <map>
 
 static map<GLuint,int> & getIds(){
@@ -410,7 +411,7 @@ void ofVbo::bind(){
 //	glPushAttrib(GL_ALL_ATTRIB_BITS);
 //	glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
 //#endif
-	
+#ifndef OPENGLES_VERSION_2
 	if(bUsingVerts){
 		glEnableClientState(GL_VERTEX_ARRAY);		
 		glBindBuffer(GL_ARRAY_BUFFER, vertId);
@@ -434,14 +435,45 @@ void ofVbo::bind(){
 		glBindBuffer(GL_ARRAY_BUFFER, texCoordId);
 		glTexCoordPointer(2, GL_FLOAT, texCoordStride, 0);
 	}
+#else
+	if(bUsingVerts){
+		ofGetGLES2Context()->glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, vertId);
+		ofGetGLES2Context()->glVertexPointer(vertSize, GL_FLOAT, vertStride, 0);
+	}
+
+	if(bUsingColors) {
+		ofGetGLES2Context()->glEnableClientState(GL_COLOR_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, colorId);
+		ofGetGLES2Context()->glColorPointer(4, GL_FLOAT, colorStride, 0);
+	}
+
+	if(bUsingNormals) {
+		ofGetGLES2Context()->glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, normalId);
+		ofGetGLES2Context()->glNormalPointer(GL_FLOAT, normalStride, 0);
+	}
+
+	if(bUsingTexCoords) {
+		ofGetGLES2Context()->glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, texCoordId);
+		ofGetGLES2Context()->glTexCoordPointer(2, GL_FLOAT, texCoordStride, 0);
+	}
+#endif
 }
 
 //--------------------------------------------------------------
 void ofVbo::unbind() {
 //	if(bUsingVerts)  glDisableClientState(GL_VERTEX_ARRAY);
+#ifndef OPENGLES_VERSION_2
 	if(bUsingColors) glDisableClientState(GL_COLOR_ARRAY);
 	if(bUsingNormals) glDisableClientState(GL_NORMAL_ARRAY);
 	if(bUsingTexCoords) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#else
+	if(bUsingColors) ofGetGLES2Context()->glDisableClientState(GL_COLOR_ARRAY);
+	if(bUsingNormals) ofGetGLES2Context()->glDisableClientState(GL_NORMAL_ARRAY);
+	if(bUsingTexCoords) ofGetGLES2Context()->glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#endif
 	//glDisableClientState(GL_EDGE_FLAG_ARRAY);
 	
 //#ifndef	TARGET_OPENGLES

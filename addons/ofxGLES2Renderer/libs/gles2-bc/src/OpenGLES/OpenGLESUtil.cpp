@@ -15,6 +15,9 @@
  */
 
 #include "OpenGLESUtil.h"
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
 
 using namespace OpenGLES;
 
@@ -56,20 +59,35 @@ void OpenGLESUtil::checkGlError(GLenum errorCode, const char *file, const unsign
 
 void OpenGLESUtil::logMessage(const char *file, int line, OpenGLESString msg)
 {
+#ifndef __ANDROID__
 	printf("%s:%d %s\n", file, line, msg().c_str());
+#else
+	__android_log_print(ANDROID_LOG_INFO,"gles-bc","%s:%d %s\n", file, line, msg().c_str());
+#endif
 }
 
 void OpenGLESUtil::logMessage(OpenGLESString msg)
 {
+#ifndef __ANDROID__
 	printf("%s\n", msg().c_str());
+#else
+	__android_log_print(ANDROID_LOG_INFO,"gles-bc", msg().c_str());
+#endif
 }
 
 void OpenGLESUtil::print( const char* format, ... ) 
 {
+#ifndef __ANDROID__
 	va_list args;
 	va_start( args, format );
 	vprintf(format, args );
 	va_end( args );
+#else
+	va_list args;
+	va_start( args, format );
+	__android_log_vprint(ANDROID_LOG_INFO,"gles-bc",format,args);
+	va_end( args );
+#endif
 }
 
 void OpenGLESUtil::printBits(int val)
@@ -77,6 +95,10 @@ void OpenGLESUtil::printBits(int val)
 	for (int i = 0; i < 32; i++) {
 		int mask = 1 << i;
 		int bit = (val & mask) >> i;
+#ifndef __ANDROID__
 		printf("%d", bit);
+#else
+		__android_log_print(ANDROID_LOG_INFO,"gles-bc", "%d", bit);
+#endif
 	}
 }

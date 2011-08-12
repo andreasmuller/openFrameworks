@@ -19,7 +19,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifndef __ANDROID__
 #include <OpenGLES/ES2/gl.h>
+#else
+#include <GLES2/gl2.h>
+#endif
 #include <vector>
 #include "../OpenGLESString.h"
 

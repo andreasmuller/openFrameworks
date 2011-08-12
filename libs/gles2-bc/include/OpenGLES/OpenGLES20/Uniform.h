@@ -17,7 +17,12 @@
 #ifndef Uniform_H_
 #define Uniform_H_
 
+#ifndef __ANDROID__
 #include <OpenGLES/ES2/gl.h>
+#else
+#include <GLES2/gl2.h>
+#endif
+
 #include <string>
 #include <sstream>
 #include <utility>

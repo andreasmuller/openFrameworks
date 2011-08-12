@@ -62,13 +62,11 @@ void ofGLES2Renderer::update(){
 //----------------------------------------------------------
 void ofGLES2Renderer::beginCustomShader( ofShader* _shader ){
 	gl->overrideShader = _shader;
-	gl->overrideShader->begin();
 }
 
 
 //----------------------------------------------------------
 void ofGLES2Renderer::endCustomShader(){
-	gl->overrideShader->end();
 	gl->overrideShader = NULL;	
 }
 

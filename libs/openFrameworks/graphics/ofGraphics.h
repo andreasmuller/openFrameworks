@@ -9,12 +9,22 @@
 #include "ofBaseTypes.h"
 #include "ofGLRenderer.h"
 
+#ifdef OPENGLES_VERSION_2
+	#include "ofGLES2Renderer.h"
+#endif
+
 #define  	CIRC_RESOLUTION		    22				// 22 pts for a circle...
 
 
 void ofSetCurrentRenderer(ofPtr<ofBaseRenderer> renderer);
 ofPtr<ofBaseRenderer> & ofGetCurrentRenderer();
 ofPtr<ofGLRenderer> ofGetGLRenderer();
+
+#ifdef OPENGLES_VERSION_2
+ofPtr<ofGLES2Renderer> ofGetGLES2Renderer();
+OpenGLES::OpenGLESContext * ofGetGLES2Context();
+#endif
+
 
 //for pdf screenshot
 void ofBeginSaveScreenAsPDF(string filename, bool bMultipage = false, bool b3D = false, ofRectangle viewport = ofRectangle(0,0,0,0));

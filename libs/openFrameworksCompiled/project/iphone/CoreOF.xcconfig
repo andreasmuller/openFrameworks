@@ -12,7 +12,7 @@ HEADER_TESS2 = "$(OF_PATH)/libs/tess2/include"
 HEADER_CAIRO = "$(OF_PATH)/libs/cairo/include/cairo"
 HEADER_RTAUDIO = "$(OF_PATH)/libs/rtaudio/include"
 HEADER_GLU = "$(OF_PATH)/libs/glu/include_iphone"
-HEADER_GLES2BC = "$(OF_PATH)/libs/gles2-bc"
+HEADER_GLES2BC = "$(OF_PATH)/libs/gles2-bc/include"
 
 LIB_FREEIMAGE = "$(OF_PATH)/libs/FreeImage/lib/osx/freeimage.a"
 LIB_FREETYPE = "$(OF_PATH)/libs/freetype/lib/iphone/freetype.a"

@@ -22,6 +22,10 @@ extern "C"{
 #include <android/log.h>
 #include "ofFileUtils.h"
 
+#ifdef OPENGLES_VERSION_2
+	#include "OpenGLESFile.h"
+#endif
+
 static bool paused=true;
 
 
@@ -72,7 +76,7 @@ JNIEnv * ofGetJNIEnv(){
 }
 
 jclass ofGetJavaOFAndroid(){
-	return ofGetJNIEnv()->FindClass("cc.openframeworks.OFAndroid");
+	return ofGetJNIEnv()->FindClass("cc/openframeworks/OFAndroid");
 }
 
 /*void ofRunApp( ofxAndroidApp * app){
@@ -141,7 +145,7 @@ void ofAppAndroidWindow::disableSetupScreen(){
 void ofAppAndroidWindow::setOrientation(ofOrientation _orientation){
 	//if(orientation==_orientation) return;
 	orientation = _orientation;
-	jclass javaClass = ofGetJNIEnv()->FindClass("cc.openframeworks.OFAndroid");
+	jclass javaClass = ofGetJNIEnv()->FindClass("cc/openframeworks/OFAndroid");
 
 	if(javaClass==0){
 		ofLog(OF_LOG_ERROR,"setOrientation: cannot find OFAndroid java class");
@@ -154,9 +158,9 @@ void ofAppAndroidWindow::setOrientation(ofOrientation _orientation){
 		return;
 	}
 	if(orientation==OF_ORIENTATION_UNKNOWN)
-		ofGetJNIEnv()->CallStaticObjectMethod(javaClass,setScreenOrientation,-1);
+		ofGetJNIEnv()->CallStaticVoidMethod(javaClass,setScreenOrientation,-1);
 	else
-		ofGetJNIEnv()->CallStaticObjectMethod(javaClass,setScreenOrientation,ofOrientationToDegrees(orientation));
+		ofGetJNIEnv()->CallStaticVoidMethod(javaClass,setScreenOrientation,ofOrientationToDegrees(orientation));
 }
 
 ofOrientation ofAppAndroidWindow::getOrientation(){
@@ -164,7 +168,7 @@ ofOrientation ofAppAndroidWindow::getOrientation(){
 }
 
 void ofAppAndroidWindow::setFullscreen(bool fullscreen){
-	jclass javaClass = ofGetJNIEnv()->FindClass("cc.openframeworks.OFAndroid");
+	jclass javaClass = ofGetJNIEnv()->FindClass("cc/openframeworks/OFAndroid");
 
 	if(javaClass==0){
 		ofLog(OF_LOG_ERROR,"setFullscreen: cannot find OFAndroid java class");
@@ -176,7 +180,7 @@ void ofAppAndroidWindow::setFullscreen(bool fullscreen){
 		ofLog(OF_LOG_ERROR,"cannot find OFAndroid setFullscreen method");
 		return;
 	}
-	ofGetJNIEnv()->CallStaticObjectMethod(javaClass,setFullscreen,fullscreen);
+	ofGetJNIEnv()->CallStaticVoidMethod(javaClass,setFullscreen,fullscreen);
 }
 
 void ofAppAndroidWindow::toggleFullscreen(){
@@ -217,6 +221,9 @@ Java_cc_openframeworks_OFAndroid_setAppDataDir( JNIEnv*  env, jobject  thiz, jst
 	const char *mfile = env->GetStringUTFChars(data_dir, &iscopy);
 	__android_log_print(ANDROID_LOG_INFO,"OF",("Setting app dir name to: " + string(mfile)).c_str());
     ofSetDataPathRoot(string(mfile)+"/");
+#ifdef OPENGLES_VERSION_2
+    OpenGLES::OpenGLESFile::setBasePath(string(mfile)+"/shaders/");
+#endif
     string appname = env->GetStringUTFChars(app_name, &iscopy);
     __android_log_print(ANDROID_LOG_INFO,"OF",("app name: " + appname).c_str());
     if(appname!=""){
@@ -456,7 +463,7 @@ jboolean
 Java_cc_openframeworks_OFAndroid_onMenuItemChecked( JNIEnv*  env, jobject  thiz, jstring menu_id, jboolean checked){
 	jboolean iscopy;
 	const char *menu_id_str = env->GetStringUTFChars(menu_id, &iscopy);
-	if(androidApp) return androidApp->menuItemChecked(menu_id_str,checked);
+	if(androidApp && menu_id_str) return androidApp->menuItemChecked(menu_id_str,checked);
 	else return false;
 }
 

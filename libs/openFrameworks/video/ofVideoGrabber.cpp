@@ -74,12 +74,13 @@ bool ofVideoGrabber::initGrabber(int w, int h, bool setUseTexture){
 			tex.allocate(width, height, GL_RGBA);
 		else if(internalPixelFormat == OF_PIXELS_BGRA)
 			tex.allocate(width, height, GL_RGBA); // for some reason if we allcoate as GL_BGRA we get a white texture
-#ifdef TARGET_ANDROID
+#if defined(TARGET_ANDROID) && !defined(OPENGLES_VERSION_2)
 		else if(internalPixelFormat == OF_PIXELS_RGB565)
 			tex.allocate(width, height, GL_RGB565_OES); // for some reason if we allcoate as GL_BGRA we get a white texture
+#endif
 		else if(internalPixelFormat == OF_PIXELS_MONO)
 			tex.allocate(width, height, GL_LUMINANCE); // for some reason if we allcoate as GL_BGRA we get a white texture
-#endif
+
 	}
 
 	return bOk;

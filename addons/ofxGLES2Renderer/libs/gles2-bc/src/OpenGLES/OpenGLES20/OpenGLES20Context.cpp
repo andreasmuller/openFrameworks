@@ -14,8 +14,13 @@
  limitations under the License.
  */
 
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
+#if TARGET_OS_IPHONE
+	#include <OpenGLES/ES2/gl.h>
+	#include <OpenGLES/ES2/glext.h>
+#elif defined( __ANDROID__ )
+	#include <GLES2/gl2.h>
+	#include <GLES2/gl2ext.h>
+#endif
 #include "OpenGLES20Context.h"
 #include "ShaderProgram.h"
 #include "OpenGLESUtil.h"
@@ -1914,31 +1919,37 @@ void OpenGLES20Context::glVertexAttribPointer (GLuint indx, GLint size, GLenum t
 // OpenGL ES 2 Extensions
 void OpenGLES20Context::glGetBufferPointervOES (GLenum target, GLenum pname, GLvoid **params)
 {
+#if TARGET_OS_IPHONE
 #if GL_OES_mapbuffer
 	::glGetBufferPointervOES(target, pname, params);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
 #else
 	LOG_DEBUG_MESSAGE(__FILE__, __LINE__, "WARNING: Not supported");
 #endif
+#endif
 }
 
 GLvoid * OpenGLES20Context::glMapBufferOES (GLenum target, GLenum access)
 {
+#if TARGET_OS_IPHONE
 #if GL_OES_mapbuffer
 	return ::glMapBufferOES(target, access);
 #else
 	LOG_DEBUG_MESSAGE(__FILE__, __LINE__, "WARNING: Not supported");
 	return 0;
 #endif
+#endif
 }
 
 GLboolean OpenGLES20Context::glUnmapBufferOES (GLenum target)
 {
+#if TARGET_OS_IPHONE
 #if GL_OES_mapbuffer
 	return ::glUnmapBufferOES(target);
 #else
 	LOG_DEBUG_MESSAGE(__FILE__, __LINE__, "WARNING: Not supported");
 	return 0;
+#endif
 #endif
 }
 

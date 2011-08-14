@@ -10,6 +10,7 @@
 #include "ofGLUtils.h"
 #include "ofImage.h"
 #include "ofFbo.h"
+#include "OpenGLES20Context.h"
 
 using namespace OpenGLES;
 
@@ -47,6 +48,8 @@ ofGLES2Renderer::ofGLES2Renderer(int _glVersion){
 		gl = new OpenGLES1::OpenGLES11Context();
 	}
 	
+	glVersion = _glVersion;
+
 	linePoints.resize(2);
 	rectPoints.resize(4);
 	triPoints.resize(3);
@@ -57,17 +60,6 @@ ofGLES2Renderer::ofGLES2Renderer(int _glVersion){
 //----------------------------------------------------------
 void ofGLES2Renderer::update(){
 
-}
-
-//----------------------------------------------------------
-void ofGLES2Renderer::beginCustomShader( ofShader* _shader ){
-	gl->overrideShader = _shader->getProgram();
-}
-
-
-//----------------------------------------------------------
-void ofGLES2Renderer::endCustomShader(){
-	gl->overrideShader = NULL;
 }
 
 //----------------------------------------------------------
@@ -1384,6 +1376,10 @@ void ofGLES2Renderer::_texImage2D (unsigned int target, int level, int internalf
 //----------------------------------------------------------
 void ofGLES2Renderer::_texEnvf(unsigned int target, unsigned int pname, unsigned int param){
 	gl->glTexEnvf( target, pname, param );
+}
+
+OpenGLES::OpenGLESContext * ofGLES2Renderer::getGLES2Context(){
+	return gl;
 }
 
 

@@ -92,7 +92,7 @@ ofPtr<ofGLES2Renderer> ofGetGLES2Renderer(){
 
 OpenGLES::OpenGLESContext * ofGetGLES2Context(){
 	ofPtr<ofGLES2Renderer> renderer = ofGetGLES2Renderer();
-	if(renderer) return renderer->gl;
+	if(renderer) return renderer->getGLES2Context();
 	else return NULL;
 }
 #endif

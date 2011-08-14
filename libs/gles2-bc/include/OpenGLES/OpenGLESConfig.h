@@ -18,6 +18,7 @@
 #define OpenGLESConfig_H__
 
 #include <string>
+#define OPENGLES_DEBUG 1
 
 namespace OpenGLES {
 

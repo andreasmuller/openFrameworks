@@ -49,9 +49,6 @@ public:
 	bool rendersPathPrimitives(){
 		return false;
 	}
-
-	void beginCustomShader( ofShader* _shader );
-	void endCustomShader();
 	
 	//--------------------------------------------
 	// transformations
@@ -150,8 +147,7 @@ public:
 	void _texImage2D (unsigned int target, int level, int internalformat, int width, int height, int border, unsigned int format, unsigned int type, const void *pixels );
 	void _texEnvf(unsigned int target, unsigned int pname, unsigned int param);			
 	
-	OpenGLES::OpenGLESContext *gl; 	// Andreas: to get fancy we will want to access this from the outside sometimes
-	
+	OpenGLES::OpenGLESContext * getGLES2Context();
 private:
 	void startSmoothing();
 	void endSmoothing();
@@ -159,7 +155,8 @@ private:
 	void gles2OfDrawBitmapCharacterStart(int stringLength);
 	void gles2OfDrawBitmapCharacter(int character, int x , int y);
 	void gles2OfDrawBitmapCharacterEnd();
-	
+
+	OpenGLES::OpenGLESContext *gl; 	// Andreas: to get fancy we will want to access this from the outside sometimes
 		
 	ofFloatColor currentColor;
 	
@@ -184,5 +181,7 @@ private:
 	ofRectMode rectMode;
 
 	ofFbo * currentFbo;
+
+	int glVersion;
 
 };

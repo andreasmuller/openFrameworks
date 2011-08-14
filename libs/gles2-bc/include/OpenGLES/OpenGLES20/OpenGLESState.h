@@ -515,6 +515,8 @@ namespace OpenGLES {
 			
 			int getCachedShaderAmount();
 			
+			StateShaderProgram * getCurrentStateShaderProgram();
+
 			UniformBase *uniforms[UniformId::COUNT];
 			Attribute *attributes[AttributeId::COUNT];			
 			

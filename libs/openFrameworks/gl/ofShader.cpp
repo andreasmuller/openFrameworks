@@ -297,10 +297,11 @@ void ofShader::unload() {
 //--------------------------------------------------------------
 void ofShader::begin() {
 	if (bLoaded == true){
-		glUseProgram(program);
     
 		#ifdef OPENGLES_VERSION_2
-			ofGetGLES2Renderer()->beginCustomShader(this);
+			ofGetGLES2Context()->glUseProgram(program);
+		#else
+			glUseProgram(program);
 		#endif
 	}
 }
@@ -308,10 +309,10 @@ void ofShader::begin() {
 //--------------------------------------------------------------
 void ofShader::end() {
 	if (bLoaded == true){
-		glUseProgram(0);
-    
 		#ifdef OPENGLES_VERSION_2
-			ofGetGLES2Renderer()->endCustomShader();
+			ofGetGLES2Context()->glUseProgram(0);
+		#else
+			glUseProgram(0);
 		#endif
 	}
 }

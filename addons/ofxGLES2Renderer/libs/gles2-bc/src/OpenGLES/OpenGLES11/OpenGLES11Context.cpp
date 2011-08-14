@@ -30,8 +30,6 @@ using namespace OpenGLES::OpenGLES1;
 
 OpenGLES11Context::OpenGLES11Context() : OpenGLESContext(1, new OpenGLES11Implementation())
 {
-	overrideShader = NULL;
-		
 	
 	implementation->init();
 }

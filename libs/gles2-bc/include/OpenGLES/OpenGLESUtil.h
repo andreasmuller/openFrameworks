@@ -17,7 +17,6 @@
 #ifndef OpenGLESUtil_H_
 #define OpenGLESUtil_H_
 
-#define OPENGLES_DEBUG 1
 #include "OpenGLESConfig.h"
 
 #ifdef OPENGLES_DEBUG

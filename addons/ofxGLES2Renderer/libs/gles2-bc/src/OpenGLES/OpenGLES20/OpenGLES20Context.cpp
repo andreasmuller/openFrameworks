@@ -14,10 +14,10 @@
  limitations under the License.
  */
 
-#if TARGET_OS_IPHONE
+#ifndef __ANDROID__
 	#include <OpenGLES/ES2/gl.h>
 	#include <OpenGLES/ES2/glext.h>
-#elif defined( __ANDROID__ )
+#else
 	#include <GLES2/gl2.h>
 	#include <GLES2/gl2ext.h>
 #endif
@@ -31,11 +31,12 @@ using namespace OpenGLES::OpenGLES2;
 
 OpenGLES20Context::OpenGLES20Context() : OpenGLESContext(2, new OpenGLES20Implementation()), matrixStack(&openGLESState, implementation), openGLESState(), shaderProgramId(0)
 {
-	overrideShader = 0;
 
 	implementation->init();
 	matrixStack.init();
 	openGLESState.init(implementation);
+
+	sendDefaultsToCustomShaders = true;
 }
 
 OpenGLES20Context::~OpenGLES20Context() 
@@ -317,42 +318,42 @@ void OpenGLES20Context::prepareToDraw()
 		}
 	}
 	
-	if( overrideShader != 0 )
+	if( shaderProgramId != 0 )
 	{
 		// if we have a override shader, see if they want a modelview matrix and a projection matrix
 		
-		GLint loc = glGetUniformLocation(overrideShader,"u_modelViewMatrix");
+		GLint loc = glGetUniformLocation(shaderProgramId,"u_modelViewMatrix");
 		if(  loc > -1 ) {
 			glUniformMatrix4fv( loc, 1, GL_FALSE, modelViewMatrix->m );
 			//overrideShader->setUniformMatrix4x4v("u_modelViewMatrix", modelViewMatrix->m );
 		}
 		
-		loc = glGetUniformLocation(overrideShader,"u_projectionMatrix");
+		loc = glGetUniformLocation(shaderProgramId,"u_projectionMatrix");
 		if( loc > -1 ) {
 			glUniformMatrix4fv( loc, 1, GL_FALSE, projectionMatrix->m );
 		}
 		
-		loc = glGetUniformLocation(overrideShader,"u_modelViewProjectionMatrix");
+		loc = glGetUniformLocation(shaderProgramId,"u_modelViewProjectionMatrix");
 		if( loc > -1 ) {
 			glUniformMatrix4fv( loc, 1, GL_FALSE, mvp.m );
 		}		
 		
 		if ( openGLESState.attributes[AttributeId::POSITION]->enabled ){
-			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_position");
+			GLint attributeLocation = glGetAttribLocation(shaderProgramId,"a_position");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::POSITION]->setVertexAttribPointer( attributeLocation );
 			}
 		}
 		
 		if ( openGLESState.attributes[AttributeId::COLOR]->enabled ){
-			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_color");
+			GLint attributeLocation = glGetAttribLocation(shaderProgramId,"a_color");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::COLOR]->setVertexAttribPointer( attributeLocation );
 			}
 		}
 		
 		if ( openGLESState.attributes[AttributeId::NORMAL]->enabled ){
-			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_normal");
+			GLint attributeLocation = glGetAttribLocation(shaderProgramId,"a_normal");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::NORMAL]->setVertexAttribPointer( attributeLocation );
 			}			
@@ -360,25 +361,25 @@ void OpenGLES20Context::prepareToDraw()
 		
 		
 		if ( openGLESState.attributes[AttributeId::TEXCOORD0]->enabled ){
-			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_texCoord0");
+			GLint attributeLocation = glGetAttribLocation(shaderProgramId,"a_texCoord0");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::TEXCOORD0]->setVertexAttribPointer( attributeLocation );
 			}			
 		}		
 		
 		if ( openGLESState.attributes[AttributeId::TEXCOORD1]->enabled ){
-			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_texCoord1");
+			GLint attributeLocation = glGetAttribLocation(shaderProgramId,"a_texCoord1");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::TEXCOORD1]->setVertexAttribPointer( attributeLocation );
 			}			
 		}		
 		
 		if ( openGLESState.attributes[AttributeId::TEXCOORD2]->enabled ){
-			GLint attributeLocation = glGetAttribLocation(overrideShader,"a_texCoord2");
+			GLint attributeLocation = glGetAttribLocation(shaderProgramId,"a_texCoord2");
 			if( attributeLocation > -1 ){
 				openGLESState.attributes[AttributeId::TEXCOORD2]->setVertexAttribPointer( attributeLocation );
 			}			
-		}				
+		}
 		
 	}
 	else
@@ -389,7 +390,7 @@ void OpenGLES20Context::prepareToDraw()
 
 void OpenGLES20Context::glDrawArrays(GLenum mode, GLint first, GLsizei count)
 {
-	if (shaderProgramId == 0) {
+	if (shaderProgramId == 0 || sendDefaultsToCustomShaders) {
 		prepareToDraw();
 	}
 	::glDrawArrays(mode, first, count);
@@ -398,7 +399,7 @@ void OpenGLES20Context::glDrawArrays(GLenum mode, GLint first, GLsizei count)
 
 void OpenGLES20Context::glDrawElements (GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
 {
-	if (shaderProgramId == 0) {
+	if (shaderProgramId == 0 || sendDefaultsToCustomShaders) {
 		prepareToDraw();
 	}
 	::glDrawElements(mode, count, type, indices);
@@ -1923,7 +1924,7 @@ void OpenGLES20Context::glVertexAttribPointer (GLuint indx, GLint size, GLenum t
 // OpenGL ES 2 Extensions
 void OpenGLES20Context::glGetBufferPointervOES (GLenum target, GLenum pname, GLvoid **params)
 {
-#if TARGET_OS_IPHONE
+#ifndef __ANDROID__
 #if GL_OES_mapbuffer
 	::glGetBufferPointervOES(target, pname, params);
 	CHECK_GL_ERROR(glGetError(), __FILE__, __LINE__);
@@ -1935,7 +1936,7 @@ void OpenGLES20Context::glGetBufferPointervOES (GLenum target, GLenum pname, GLv
 
 GLvoid * OpenGLES20Context::glMapBufferOES (GLenum target, GLenum access)
 {
-#if TARGET_OS_IPHONE
+#ifndef __ANDROID__
 #if GL_OES_mapbuffer
 	return ::glMapBufferOES(target, access);
 #else
@@ -1947,7 +1948,7 @@ GLvoid * OpenGLES20Context::glMapBufferOES (GLenum target, GLenum access)
 
 GLboolean OpenGLES20Context::glUnmapBufferOES (GLenum target)
 {
-#if TARGET_OS_IPHONE
+#ifndef __ANDROID__
 #if GL_OES_mapbuffer
 	return ::glUnmapBufferOES(target);
 #else

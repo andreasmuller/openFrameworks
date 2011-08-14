@@ -289,6 +289,8 @@ namespace OpenGLES {
 			GLfloat* getModelViewMatrix();
 			GLfloat* getProjectionMatrix();			
 			
+			void setSendDefaultsToCustomShaders(bool send);
+
 			OpenGLESState openGLESState;
 			
 		private:
@@ -297,6 +299,8 @@ namespace OpenGLES {
 			GLuint shaderProgramId;
 			
 			void prepareToDraw();
+
+			bool sendDefaultsToCustomShaders;
 		};
 		
 	}

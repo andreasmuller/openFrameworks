@@ -876,13 +876,13 @@ void OpenGLESState::setCurrentProgram()
 			
 			currentStateShaderProgram = new StateShaderProgram(getCopyOfCurrentState(), new ShaderProgram("UberShader", vertexShader, fragmentShader));
 			stateShaderPrograms.push_back(currentStateShaderProgram);
-			currentStateShaderProgram->shaderProgram->use();
 			setActiveUniformLocations(currentStateShaderProgram->shaderProgram->getActiveUniforms());
 			setActiveAttributeLocations(currentStateShaderProgram->shaderProgram->getActiveAttributes());
 			
 			uberShaderCompiled = true;
 		}
-		
+
+		currentStateShaderProgram->shaderProgram->use();
 		uploadUniforms();
 		uploadAttributes();
 		return;
@@ -973,15 +973,19 @@ void OpenGLESState::setCurrentProgram()
 		currentStateShaderProgram = new StateShaderProgram(getCopyOfCurrentState(), new ShaderProgram(OpenGLESString("Optimized Shader ") + (stateShaderPrograms.size() + 1), vertexShader, fragmentShader));
 		stateShaderPrograms.push_back(currentStateShaderProgram);
 	}
-	
+
+	currentStateShaderProgram->shaderProgram->use();
 	if (currentStateShaderProgram != oldStateShaderProgram) {
-		currentStateShaderProgram->shaderProgram->use();
 		setActiveUniformLocations(currentStateShaderProgram->shaderProgram->getActiveUniforms());
 		setActiveAttributeLocations(currentStateShaderProgram->shaderProgram->getActiveAttributes());
 	}
 	
 	uploadAttributes();
 	uploadUniforms();
+}
+
+StateShaderProgram * OpenGLESState::getCurrentStateShaderProgram(){
+	return currentStateShaderProgram;
 }
 
 void OpenGLESState::addRequiredShaderSources(std::vector<ShaderSource *> &vertexShaderSources, std::vector<ShaderSource *> &fragmentShaderSources)

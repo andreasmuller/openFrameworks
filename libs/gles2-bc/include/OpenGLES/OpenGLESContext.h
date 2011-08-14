@@ -347,7 +347,7 @@ namespace OpenGLES {
 		virtual GLfloat* getProjectionMatrix()=0;
 		//virtual GLfloat* getTextureMatrix(int index)=0;
 		
-		GLuint overrideShader;
+		//GLuint overrideShader;
 			
 		
 	protected:

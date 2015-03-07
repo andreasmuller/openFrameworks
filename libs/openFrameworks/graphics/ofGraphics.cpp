@@ -212,7 +212,7 @@ void ofPopMatrix(){
  *
  *			You can query one of the following:
  *
- *			[OF_MATRIX_MODELVIEW | OF_MATRIX_PROJECTION | OF_MATRIX_TEXTURE]
+ *			[OF_MATRIX_MODELVIEW | OF_MATRIX_PROJECTION | OF_MATRIX_TEXTURE | OF_MATRIX_NORMAL ]
  *
  *			Each query will return the state of the matrix
  *			as it was uploaded to the shader currently bound.

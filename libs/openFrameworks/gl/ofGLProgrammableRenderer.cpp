@@ -19,6 +19,7 @@ static const string VIEW_MATRIX_UNIFORM="viewMatrix";
 static const string MODELVIEW_MATRIX_UNIFORM="modelViewMatrix";
 static const string PROJECTION_MATRIX_UNIFORM="projectionMatrix";
 static const string MODELVIEW_PROJECTION_MATRIX_UNIFORM="modelViewProjectionMatrix";
+static const string NORMAL_MATRIX_UNIFORM="normalMatrix";
 static const string TEXTURE_MATRIX_UNIFORM="textureMatrix";
 static const string COLOR_UNIFORM="globalColor";
 
@@ -799,9 +800,7 @@ void ofGLProgrammableRenderer::uploadCurrentMatrix(){
 		currentShader->setUniformMatrix4f(VIEW_MATRIX_UNIFORM, matrixStack.getViewMatrix());
 		currentShader->setUniformMatrix4f(MODELVIEW_MATRIX_UNIFORM, matrixStack.getModelViewMatrix());
 		currentShader->setUniformMatrix4f(MODELVIEW_PROJECTION_MATRIX_UNIFORM, matrixStack.getModelViewProjectionMatrix());
-		if(currentMaterial){
-			currentMaterial->uploadMatrices(*currentShader,*this);
-		}
+		currentShader->setUniformMatrix4f(NORMAL_MATRIX_UNIFORM, getCurrentNormalMatrix() );
 		break;
 	case OF_MATRIX_PROJECTION:
 		currentShader->setUniformMatrix4f(PROJECTION_MATRIX_UNIFORM, matrixStack.getProjectionMatrix());
@@ -824,6 +823,9 @@ ofMatrix4x4 ofGLProgrammableRenderer::getCurrentMatrix(ofMatrixMode matrixMode_)
 			break;
 		case OF_MATRIX_TEXTURE:
 			return matrixStack.getTextureMatrix();
+			break;
+		case OF_MATRIX_NORMAL:
+			return getCurrentNormalMatrix();
 			break;
 		default:
 			ofLogWarning() << "Invalid getCurrentMatrix query";
@@ -1434,9 +1436,7 @@ void ofGLProgrammableRenderer::uploadMatrices(){
 	currentShader->setUniformMatrix4f(PROJECTION_MATRIX_UNIFORM, matrixStack.getProjectionMatrix());
 	currentShader->setUniformMatrix4f(TEXTURE_MATRIX_UNIFORM, matrixStack.getTextureMatrix());
 	currentShader->setUniformMatrix4f(MODELVIEW_PROJECTION_MATRIX_UNIFORM, matrixStack.getModelViewProjectionMatrix());
-	if(currentMaterial){
-		currentMaterial->uploadMatrices(*currentShader,*this);
-	}
+	currentShader->setUniformMatrix4f(NORMAL_MATRIX_UNIFORM, getCurrentNormalMatrix() );
 }
 
 //----------------------------------------------------------

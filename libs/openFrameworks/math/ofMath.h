@@ -174,6 +174,9 @@ float ofMap(float value, float inputMin, float inputMax, float outputMin, float 
 /// \returns a floating point number in the range [min, max].
 float ofClamp(float value, float min, float max);
 
+/// \brief Shortcut for ofClamp for clamping a value between 0 and 1.
+float ofClamp01(float value ) { return ofClamp( value, 0.0f, 1.0f); }
+
 /// \brief Determine if a number is inside of a given range.
 /// \param t The value to test.
 /// \param min The lower bound of the range.
@@ -584,3 +587,74 @@ Type ofInterpolateHermite(Type y0, Type y1, Type y2, Type y3, float pct, float t
 
    return(a0*y1+a1*m0+a2*m1+a3*y2);
 }
+
+
+/// \brief Step function.
+/// A t value smaller than edge returns 0, a larger returns 1.
+///
+///
+/// \param a The edge.
+/// \param b The value compared to the edge.
+float ofStep(float edge, float t) {
+	return (float) (t >= edge);
+}
+
+/// \brief Step in and out function.
+/// A t value smaller than edge returns 0, one between the edges returns 1 and one larger than edge1 returns 0 again.
+/// \param a The start edge.
+/// \param b The end edge.
+/// \param c The value compared to the edges.
+float ofStepInOut(float edge0, float edge1, float t) {
+	return ofStep( edge0, t ) * (1.0f - ofStep( edge1, t ));
+}
+
+/// \brief Linear step function.
+/// A t value smaller than edge0 returns 0, it interpolates 0..1 between edge0 and edge1 and t values larger than edge1 return 1.
+/// \param a The start edge.
+/// \param b The end edge.
+/// \param c The value compared to the edges.
+float ofLinearStep( float edge0, float edge1, float t ) {
+	// Scale, and clamp x to 0..1 range
+	return ofClamp( (t - edge0)/(edge1 - edge0), 0.0f, 1.0f);
+}
+
+/// \brief Linear step in and out function.
+/// A t value below the low0 edge returns 0, returns interpolated values between 0..1 between edges low0 and high0,
+/// between edges high0 and high1 it returns 1 and returns values interpolated 1..0 between edges high1 and low1,
+/// values higher than low1 return 0.
+/// \param a The start low edge.
+/// \param b The start high edge.
+/// \param c The end high edge.
+/// \param d The end low edge.
+/// \param e The value compared to the edges.
+float ofLinearStepInOut( float low0, float high0, float high1, float low1, float t )
+{
+	return ofLinearStep( low0, high0, t ) * (1.0f - ofLinearStep( high1, low1, t ));
+}
+
+/// \brief Smoothstep function.
+/// A t value smaller than edge0 returns 0, smoothly interpolates 0..1 between edge0 and edge1 and t values larger than edge1 return 1
+///  http://en.wikipedia.org/wiki/Smoothstep
+/// \param a The start edge.
+/// \param b The end edge.
+/// \param c The value compared to the edges.
+float ofSmoothStep(float edge0, float edge1, float x)
+{
+	// Scale, and clamp x to 0..1 range
+	x = ofClamp( (x - edge0)/(edge1 - edge0), 0, 1);
+	// Evaluate polynomial
+	return x*x*x*(x*(x*6 - 15) + 10);
+}
+
+/// \brief Smoothstep int and out function.
+/// The same as ofLinearStepInOut, but with smoothstep interpolation. ofSmoothStepInOut( 0, 0.5, 0.5, 1, 0..1 ) gives a bell-like curve.
+/// \param a The start low edge.
+/// \param b The start high edge.
+/// \param c The end high edge.
+/// \param d The end low edge.
+/// \param e The value compared to the edges.
+float ofSmoothStepInOut( float low0, float high0, float high1, float low1, float t )
+{
+	return ofSmoothStep( low0, high0, t ) * (1.0f - ofSmoothStep( high1, low1, t ));
+}
+

@@ -68,7 +68,7 @@ public:
     inline float operator [](int i) const;
     
     void get(ofMatrix4x4& matrix) const;
-    
+	ofMatrix4x4 get() const;
 
     inline float& x();
     inline float& y();

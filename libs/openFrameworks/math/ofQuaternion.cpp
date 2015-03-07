@@ -10,6 +10,11 @@ void ofQuaternion::get(ofMatrix4x4& matrix) const {
 	matrix.makeRotationMatrix(*this);
 }
 
+ofMatrix4x4 ofQuaternion::get() const {
+	ofMatrix4x4 tmp;
+	get(tmp);
+	return tmp;
+}
 
 /// Set the elements of the Quat to represent a rotation of angle
 /// (degrees) around the axis (x,y,z)

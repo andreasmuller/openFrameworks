@@ -5,6 +5,7 @@
 # include official directories
 !projectGenerator/
 !devApps/
+!Nespresso/
 
 # ignore bin folders' contents, except data folder therein
 /devApps/*/bin/*

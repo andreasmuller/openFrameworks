@@ -765,10 +765,11 @@ bool ofXml::setAttribute(const string& path, const string& value)
 }
 
 //---------------------------------------------------------
-bool ofXml::loadFromBuffer( const string& buffer )
-{
-    Poco::XML::DOMParser parser;
-    
+bool ofXml::loadFromBuffer( const string& buffer, int _namePoolSize )
+{   
+    Poco::XML::NamePool* namePool = new Poco::XML::NamePool(_namePoolSize);
+    Poco::XML::DOMParser parser(namePool);
+
     // release and null out if we already have a document
     if(document) {
         document->release();

@@ -43,7 +43,7 @@ bool ofXml::load(const string & path){
 		return false;
 	}
 	ofBuffer xmlBuffer(file);
-	return loadFromBuffer(xmlBuffer);
+	return loadFromBuffer(xmlBuffer );
 }
 
 bool ofXml::save(const string & path){
@@ -797,10 +797,13 @@ bool ofXml::setAttribute(const string& path, const string& value)
 }
 
 //---------------------------------------------------------
-bool ofXml::loadFromBuffer( const string& buffer )
+bool ofXml::loadFromBuffer( const string& buffer, int _namePoolSize )
 {
-    Poco::XML::DOMParser parser;
-    
+	
+	Poco::XML::NamePool* namePool = new Poco::XML::NamePool(_namePoolSize);
+    Poco::XML::DOMParser parser(namePool);
+	
+	
     // release and nullptr out if we already have a document
     if(document) {
         document->release();
@@ -812,11 +815,12 @@ bool ofXml::loadFromBuffer( const string& buffer )
     	document->normalize();
     	return true;
 	} catch( const Poco::XML::SAXException & e ) {
-		ofLogError("ofXml") << "parse error: " << e.message();
+		ofLogError("ofXml") << "parse error: " << e.message() << " description: " << e.what();
         document = new Poco::XML::Document;
         element = document->documentElement();
         return false;
     } catch( const exception & e ) {
+		ofLogNotice() << "exception & e  e.what(): " << e.what();
         short msg = atoi(e.what());
         ofLogError("ofXml") << "parse error: " << DOMErrorMessage(msg);
         document = new Poco::XML::Document;
@@ -982,6 +986,9 @@ const Poco::XML::Document* ofXml::getPocoDocument() const  {
 
 string ofXml::DOMErrorMessage(short msg)
 {
+	
+	ofLogNotice() << "DOMErrorMessage: " << msg;
+	
     switch(msg) {
         case 1:            
             return "INDEX_SIZE_ERR";

@@ -88,7 +88,7 @@ public:
     bool            setToSibling();
     bool            setToPrevSibling();
     
-    bool            loadFromBuffer( const string& buffer );
+    bool            loadFromBuffer( const string& buffer, int _namePoolSize = 4096 );
     
     string          toString() const;
     

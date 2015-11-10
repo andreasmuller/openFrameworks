@@ -40,3 +40,5 @@ OF_CORE_FRAMEWORKS = -framework Accelerate -framework AGL -framework AppKit -fra
 
 // define which C++ library is required to build and avoid tr1/memory hangups
 CLANG_CXX_LIBRARY = libstdc++
+
+USER_HEADER_SEARCH_PATHS = "$(OF_PATH)/libs/openssl/include"

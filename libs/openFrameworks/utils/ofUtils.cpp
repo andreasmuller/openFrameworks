@@ -59,6 +59,9 @@ static bool enableDataPath = true;
 static unsigned long long startTimeSeconds;   //  better at the first frame ?? (currently, there is some delay from static init, to running.
 static unsigned long long startTimeNanos;
 
+static unsigned long long startTime = ofGetSystemTime();   //  better at the first frame ?? (currently, there is some delay from static init, to running.
+static unsigned long long startTimeMicros = ofGetSystemTimeMicros();
+
 
 //--------------------------------------
 void ofGetMonotonicTime(unsigned long long & seconds, unsigned long long & nanoseconds){
@@ -90,35 +93,27 @@ void ofGetMonotonicTime(unsigned long long & seconds, unsigned long long & nanos
 #endif
 }
 
-
 //--------------------------------------
 unsigned long long ofGetElapsedTimeMillis(){
-	unsigned long long seconds;
-	unsigned long long nanos;
-	ofGetMonotonicTime(seconds,nanos);
-	return (seconds - startTimeSeconds)*1000 + ((long long)(nanos - startTimeNanos))/1000000;
+	return ofGetSystemTime() - startTime;
 }
 
 //--------------------------------------
 unsigned long long ofGetElapsedTimeMicros(){
-	unsigned long long seconds;
-	unsigned long long nanos;
-	ofGetMonotonicTime(seconds,nanos);
-	return (seconds - startTimeSeconds)*1000000 + ((long long)(nanos - startTimeNanos))/1000;
+	return ofGetSystemTimeMicros() - startTimeMicros;
 }
 
 //--------------------------------------
 float ofGetElapsedTimef(){
-	unsigned long long seconds;
-	unsigned long long nanos;
-	ofGetMonotonicTime(seconds,nanos);
-	return (seconds - startTimeSeconds) + ((long long)(nanos - startTimeNanos))/1000000000.;
+	return ofGetElapsedTimeMicros() / 1000000.0f;
 }
 
 //--------------------------------------
 void ofResetElapsedTimeCounter(){
-	ofGetMonotonicTime(startTimeSeconds,startTimeNanos);
+	startTime = ofGetSystemTime();
+	startTimeMicros = ofGetSystemTimeMicros();
 }
+
 
 //=======================================
 // this is from freeglut, and used internally:
@@ -128,17 +123,48 @@ void ofResetElapsedTimeCounter(){
  * 32-bit, where the GLUT API return value is also overflowed.
  */
 unsigned long long ofGetSystemTime( ) {
-	unsigned long long seconds, nanoseconds;
-	ofGetMonotonicTime(seconds,nanoseconds);
-	return seconds * 1000 + nanoseconds / 1000000;
+	#ifdef TARGET_LINUX
+		struct timespec now;
+		clock_gettime(CLOCK_MONOTONIC, &now);
+		return
+			(unsigned long long) now.tv_nsec/1000000. +
+			(unsigned long long) now.tv_sec*1000;
+	#elif !defined( TARGET_WIN32 )
+		struct timeval now;
+		gettimeofday( &now, NULL );
+		return 
+			(unsigned long long) now.tv_usec/1000 + 
+			(unsigned long long) now.tv_sec*1000;
+	#else
+		#if defined(_WIN32_WCE)
+			return GetTickCount();
+		#else
+			return timeGetTime();
+		#endif
+	#endif
 }
 
 unsigned long long ofGetSystemTimeMicros( ) {
-	unsigned long long seconds, nanoseconds;
-	ofGetMonotonicTime(seconds,nanoseconds);
-	return seconds * 1000000 + nanoseconds / 1000;
+	#ifdef TARGET_LINUX
+		struct timespec now;
+		clock_gettime(CLOCK_MONOTONIC, &now);
+		return
+			(unsigned long long) now.tv_nsec/1000. +
+			(unsigned long long) now.tv_sec*1000000;
+	#elif !defined( TARGET_WIN32 )
+		struct timeval now;
+		gettimeofday( &now, NULL );
+		return 
+			(unsigned long long) now.tv_usec +
+			(unsigned long long) now.tv_sec*1000000;
+	#else
+		#if defined(_WIN32_WCE)
+			return ((unsigned long long)GetTickCount()) * 1000;
+		#else
+			return ((unsigned long long)timeGetTime()) * 1000;
+		#endif
+	#endif
 }
-
 //--------------------------------------------------
 unsigned int ofGetUnixTime(){
 	return (unsigned int)time(NULL);

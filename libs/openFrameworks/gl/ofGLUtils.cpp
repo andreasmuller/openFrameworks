@@ -172,6 +172,38 @@ int ofGetGLFormatFromInternal(int glInternalFormat){
 				return GL_RG;
 #endif
 
+#ifdef TARGET_OPENGLES
+			
+		case GL_ALPHA8_EXT:
+		case GL_LUMINANCE8_EXT:
+		case GL_R32F_EXT:
+		case GL_ALPHA16F_EXT:
+		case GL_LUMINANCE16F_EXT:
+			
+			return GL_RED_EXT;
+
+			
+		case GL_LUMINANCE8_ALPHA8_EXT:
+		case GL_RG32F_EXT:
+		case GL_LUMINANCE_ALPHA32F_EXT:
+		case GL_LUMINANCE_ALPHA16F_EXT:
+			
+			return GL_RG_EXT;
+
+		case GL_BGRA8_EXT:
+			return GL_BGRA;
+
+		case GL_RGBA32F_EXT:
+			
+			ofLogNotice() << "ofGetGLFormatFromInternal got a GL_RGBA32F_EXT which translates to GL_RGBA";
+			
+			return GL_RGBA;
+			
+		case GL_RGB32F_EXT:
+			return GL_RGB;
+			
+#endif
+			
 #ifndef TARGET_OPENGLES
 			case GL_ALPHA8:
 #endif
@@ -235,7 +267,24 @@ int ofGetGlTypeFromInternal(int glInternalFormat){
 #endif
 			return GL_FLOAT;
 
+			
+#ifdef TARGET_OPENGLES
+			
+		case GL_RGBA32F_EXT:
+		case GL_RGB32F_EXT:
+		case GL_RG32F_EXT:
+		case GL_R32F_EXT:
+		case GL_ALPHA32F_EXT:
+		case GL_LUMINANCE32F_EXT:
+		case GL_LUMINANCE_ALPHA32F_EXT:
+			//GL_HALF_FLOAT_OES
+			
+			ofLogNotice() << "ofGetGlTypeFromInternal got a GL_RGBA32F_EXT, GL_RGB32F_EXT, (etc, etc) which translates to GL_HALF_FLOAT_OES";
+			
+			return GL_HALF_FLOAT_OES; // GL_HALF_FLOAT_OES GL_FLOAT
+#endif
 
+			
 		case GL_DEPTH_STENCIL:
 			 return GL_UNSIGNED_INT_24_8;
 

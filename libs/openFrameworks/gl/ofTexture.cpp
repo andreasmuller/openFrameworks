@@ -443,6 +443,28 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 #else
 	if(texData.textureTarget == GL_TEXTURE_2D){
 #endif
+		
+		string glInternalFormatString = "NOT FOUND";
+		if( texData.glInternalFormat == GL_RGBA ) { glInternalFormatString = "GL_RGBA"; }
+		if( texData.glInternalFormat == GL_RGB ) { glInternalFormatString = "GL_RGB"; }
+		if( texData.glInternalFormat == GL_RGB8_OES ) { glInternalFormatString = "GL_RGB8_OES"; }
+		if( texData.glInternalFormat == GL_RGBA32F_EXT ) { glInternalFormatString = "GL_RGBA32F_EXT"; }
+		
+		
+		string glFormatString = "NOT FOUND";
+		if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
+		if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
+		
+		string pixelTypeString = "NOT FOUND";
+		if( pixelType == GL_HALF_FLOAT_OES ) { pixelTypeString = "GL_HALF_FLOAT_OES"; }
+		if( pixelType == GL_UNSIGNED_BYTE ) { pixelTypeString = "GL_UNSIGNED_BYTE"; }
+		
+		
+		ofLogNotice() << "ofTexture::allocate, glInternalFormat: " << glInternalFormatString << "	glFormat: " << glFormatString << "	pixelType: " << pixelTypeString;
+
+		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " massive hack for float textures texData.glInternalFormat GL_RGBA32F_EXT > GL_RGBA";
+		if( texData.glInternalFormat == GL_RGBA32F_EXT ) texData.glInternalFormat = GL_RGBA;
+		
 		glBindTexture(texData.textureTarget,texData.textureID);
 		glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, glFormat, pixelType, 0);  // init to black...
 

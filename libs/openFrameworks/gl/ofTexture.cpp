@@ -462,7 +462,7 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		
 		ofLogNotice() << "ofTexture::allocate, glInternalFormat: " << glInternalFormatString << "	glFormat: " << glFormatString << "	pixelType: " << pixelTypeString;
 
-		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " massive hack for float textures texData.glInternalFormat GL_RGBA32F_EXT > GL_RGBA";
+		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " hack for float textures texData.glInternalFormat GL_RGBA32F_EXT > GL_RGBA";
 		if( texData.glInternalFormat == GL_RGBA32F_EXT ) texData.glInternalFormat = GL_RGBA;
 		
 		glBindTexture(texData.textureTarget,texData.textureID);
@@ -555,6 +555,14 @@ void ofTexture::loadData(const float * data, int w, int h, int glFormat){
 	loadData(data, w, h, glFormat, GL_FLOAT);
 }
 
+#if TARGET_OS_IOS
+//----------------------------------------------------------
+void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat) {
+	//ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
+	loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
+}
+#endif
+
 //----------------------------------------------------------
 void ofTexture::loadData(const ofPixels & pix){
 	if(!isAllocated()){
@@ -625,6 +633,9 @@ void ofTexture::loadData(const ofBufferObject & buffer, int glFormat, int glType
 void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glType){
 
 	if(w > texData.tex_w || h > texData.tex_h) {
+		
+		ofLogNotice() << "ofTexture::loadData re-allocating";
+		
 		if(isAllocated()){
 			allocate(w, h, texData.glInternalFormat, glFormat, glType);
 		}else{
@@ -644,6 +655,19 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 		texData.tex_t = (float)(w) / (float)texData.tex_w;
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
+	
+	
+	string glFormatString = "NOT FOUND";
+	if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
+	if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
+
+	string glTypeString = "NOT FOUND";
+	if( glType == GL_FLOAT ) { glTypeString = "GL_FLOAT"; }
+	if( glType == GL_HALF_FLOAT_OES ) { glTypeString = "GL_HALF_FLOAT_OES"; }
+	if( glType == GL_UNSIGNED_BYTE ) { glTypeString = "GL_UNSIGNED_BYTE"; }
+	
+	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
+	
 	
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);

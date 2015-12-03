@@ -489,6 +489,11 @@ class ofTexture : public ofBaseDraws {
 	/// \param glFormat GL pixel type: GL_RGBA, GL_LUMINANCE, etc.
 	void loadData(const float* data, int w, int h, int glFormat);
 
+	#if TARGET_OS_IOS
+	/// Loads data using the Half Float format on IOS
+	void loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat);
+	#endif
+	
 	/// \brief Load pixels from an ofPixels instance.
 	/// \param pix Reference to ofPixels instance.
 	void loadData(const ofPixels & pix);

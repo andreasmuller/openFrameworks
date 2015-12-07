@@ -449,6 +449,8 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		if( texData.glInternalFormat == GL_RGB ) { glInternalFormatString = "GL_RGB"; }
 		if( texData.glInternalFormat == GL_RGB8_OES ) { glInternalFormatString = "GL_RGB8_OES"; }
 		if( texData.glInternalFormat == GL_RGBA32F_EXT ) { glInternalFormatString = "GL_RGBA32F_EXT"; }
+		if( texData.glInternalFormat == GL_RGBA32F ) { glInternalFormatString = "GL_RGBA32F"; }
+		if( texData.glInternalFormat == GL_RGBA16F ) { glInternalFormatString = "GL_RGBA16F"; }
 		
 		
 		string glFormatString = "NOT FOUND";
@@ -456,14 +458,18 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
 		
 		string pixelTypeString = "NOT FOUND";
+		if( pixelType == GL_FLOAT ) { pixelTypeString = "GL_FLOAT"; }
 		if( pixelType == GL_HALF_FLOAT_OES ) { pixelTypeString = "GL_HALF_FLOAT_OES"; }
+		if( pixelType == GL_HALF_FLOAT ) { pixelTypeString = "GL_HALF_FLOAT"; }		
 		if( pixelType == GL_UNSIGNED_BYTE ) { pixelTypeString = "GL_UNSIGNED_BYTE"; }
 		
 		
 		ofLogNotice() << "ofTexture::allocate, glInternalFormat: " << glInternalFormatString << "	glFormat: " << glFormatString << "	pixelType: " << pixelTypeString;
 
-		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " hack for float textures texData.glInternalFormat GL_RGBA32F_EXT > GL_RGBA";
+		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " hack for float textures texData.glInternalFormat GL_RGBA32F_EXT/GL_RGBA32F/GL_RGBA16F > GL_RGBA";
 		if( texData.glInternalFormat == GL_RGBA32F_EXT ) texData.glInternalFormat = GL_RGBA;
+		if( texData.glInternalFormat == GL_RGBA32F ) texData.glInternalFormat = GL_RGBA;
+		if( texData.glInternalFormat == GL_RGBA16F ) texData.glInternalFormat = GL_RGBA;
 		
 		glBindTexture(texData.textureTarget,texData.textureID);
 		glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, glFormat, pixelType, 0);  // init to black...
@@ -559,7 +565,8 @@ void ofTexture::loadData(const float * data, int w, int h, int glFormat){
 //----------------------------------------------------------
 void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat) {
 	//ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
-	loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
+	//loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
+	loadData(data, w, h, glFormat, GL_HALF_FLOAT);
 }
 #endif
 

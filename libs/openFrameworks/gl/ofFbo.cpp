@@ -647,7 +647,11 @@ void ofFbo::allocate(Settings _settings) {
 
 	// now create all textures and color buffers
 	if(_settings.colorFormats.size() > 0) {
-		for(int i=0; i<(int)_settings.colorFormats.size(); i++) createAndAttachTexture(_settings.colorFormats[i], i);
+		for(int i=0; i<(int)_settings.colorFormats.size(); i++)
+		{
+			ofLogNotice() << "ofFbo::allocate(Settings _settings) _settings.internalformat: " << _settings.colorFormats[i] << "	line " << __LINE__;
+			createAndAttachTexture(_settings.colorFormats[i], i);
+		}
 	} else if(_settings.numColorbuffers > 0) {
 		ofLogNotice() << "ofFbo::allocate(Settings _settings) _settings.internalformat: " << _settings.internalformat << "	line " << __LINE__;
 		for(int i=0; i<_settings.numColorbuffers; i++) createAndAttachTexture(_settings.internalformat, i);
@@ -723,7 +727,8 @@ void ofFbo::createAndAttachTexture(GLenum internalFormat, GLenum attachmentPoint
 	if( internalFormat == GL_RGB ) 		{ internalFormatString = "GL_RGB"; }
 	if( internalFormat == GL_RGB8_OES ) { internalFormatString = "GL_RGB8_OES"; }
 	if( internalFormat == GL_RGBA32F_EXT ) { internalFormatString = "GL_RGBA32F_EXT"; }
-	
+	if( internalFormat == GL_RGBA32F ) { internalFormatString = "GL_RGBA32F"; }
+	if( internalFormat == GL_RGBA16F ) { internalFormatString = "GL_RGBA16F"; }
 	
 	ofLogNotice() << "ofFbo::createAndAttachTexture internalFormat: " << internalFormatString;
 	

@@ -301,7 +301,7 @@ void ofEasyCam::mouseReleased(ofMouseEventArgs & mouse){
 	unsigned long curTap = ofGetElapsedTimeMillis();
 	ofRectangle viewport = getViewport(this->viewport);
 	if(lastTap != 0 && curTap - lastTap < doubleclickTime){
-		reset();
+		//reset();
 		return;
 	}
 	lastTap = curTap;

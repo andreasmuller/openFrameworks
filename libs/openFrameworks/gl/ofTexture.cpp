@@ -656,7 +656,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
 	
-	
+	/*
 	string glFormatString = "NOT FOUND";
 	if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
 	if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
@@ -667,7 +667,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 	if( glType == GL_UNSIGNED_BYTE ) { glTypeString = "GL_UNSIGNED_BYTE"; }
 	
 	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
-	
+	*/
 	
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);

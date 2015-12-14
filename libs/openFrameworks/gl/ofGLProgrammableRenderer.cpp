@@ -226,10 +226,16 @@ void ofGLProgrammableRenderer::draw(const ofVboMesh & mesh, ofPolyRenderMode ren
 
 //----------------------------------------------------------
 void ofGLProgrammableRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRenderMode renderType, int primCount) const{
+	
 	if(mesh.getNumVertices()==0) return;
 	GLuint mode = ofGetGLPrimitiveMode(mesh.getMode());
+	
+//#ifndef TARGET_OPENGLES
+
 #ifndef TARGET_OPENGLES
 	glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(renderType));
+#endif
+	
 	if(mesh.getNumIndices() && renderType!=OF_MESH_POINTS){
 		if (primCount <= 1) {
 			drawElements(mesh.getVbo(),mode,mesh.getNumIndices());
@@ -250,7 +256,11 @@ void ofGLProgrammableRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRende
 	// ideally the glPolygonMode (or the polygon draw mode) should be part of ofStyle so that we can keep track
 	// of its state on the client side...
 
+#ifndef TARGET_OPENGLES
 	glPolygonMode(GL_FRONT_AND_BACK, currentStyle.bFill ?  GL_FILL : GL_LINE);
+#endif
+	
+	/*
 #else
 	if(renderType == OF_MESH_POINTS){
 		draw(mesh.getVbo(),GL_POINTS,0,mesh.getNumVertices());
@@ -268,6 +278,7 @@ void ofGLProgrammableRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRende
 		}
 	}
 #endif
+	 */
 }
 
 //----------------------------------------------------------
@@ -448,8 +459,8 @@ void ofGLProgrammableRenderer::drawInstanced(const ofVbo & vbo, GLuint drawMode,
 		// todo: activate instancing once OPENGL ES supports instancing, starting with version 3.0
 		// unfortunately there is currently no easy way within oF to query the current OpenGL version.
 		// https://www.khronos.org/opengles/sdk/docs/man3/xhtml/glDrawElementsInstanced.xml
-		ofLogWarning("ofVbo") << "drawInstanced(): hardware instancing is not supported on OpenGL ES < 3.0";
-		// glDrawArraysInstanced(drawMode, first, total, primCount);
+		//ofLogWarning("ofVbo") << "drawInstanced(): hardware instancing is not supported on OpenGL ES < 3.0";
+		glDrawArraysInstancedEXT(drawMode, first, total, primCount);
 #else
 		glDrawArraysInstanced(drawMode, first, total, primCount);
 #endif
@@ -466,8 +477,9 @@ void ofGLProgrammableRenderer::drawElementsInstanced(const ofVbo & vbo, GLuint d
         // todo: activate instancing once OPENGL ES supports instancing, starting with version 3.0
         // unfortunately there is currently no easy way within oF to query the current OpenGL version.
         // https://www.khronos.org/opengles/sdk/docs/man3/xhtml/glDrawElementsInstanced.xml
-        ofLogWarning("ofVbo") << "drawElementsInstanced(): hardware instancing is not supported on OpenGL ES < 3.0";
-        // glDrawElementsInstanced(drawMode, amt, GL_UNSIGNED_SHORT, nullptr, primCount);
+        //ofLogWarning("ofVbo") << "drawElementsInstanced(): hardware instancing is not supported on OpenGL ES < 3.0";
+		
+        glDrawElementsInstancedEXT(drawMode, amt, GL_UNSIGNED_SHORT, nullptr, primCount);
 #else
         glDrawElementsInstanced(drawMode, amt, GL_UNSIGNED_INT, nullptr, primCount);
 #endif

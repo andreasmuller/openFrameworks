@@ -555,7 +555,7 @@ void ofTexture::loadData(const float * data, int w, int h, int glFormat){
 	loadData(data, w, h, glFormat, GL_FLOAT);
 }
 
-#if TARGET_OS_IOS
+#ifdef TARGET_OPENGLES
 //----------------------------------------------------------
 void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat) {
 	//ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
@@ -656,7 +656,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
 	
-	
+	/*
 	string glFormatString = "NOT FOUND";
 	if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
 	if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
@@ -666,8 +666,8 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 	if( glType == GL_HALF_FLOAT_OES ) { glTypeString = "GL_HALF_FLOAT_OES"; }
 	if( glType == GL_UNSIGNED_BYTE ) { glTypeString = "GL_UNSIGNED_BYTE"; }
 	
-	//ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
-	
+	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
+	*/
 	
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);

@@ -666,7 +666,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 	if( glType == GL_HALF_FLOAT_OES ) { glTypeString = "GL_HALF_FLOAT_OES"; }
 	if( glType == GL_UNSIGNED_BYTE ) { glTypeString = "GL_UNSIGNED_BYTE"; }
 	
-	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
+	//ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
 	
 	
 	// bind texture

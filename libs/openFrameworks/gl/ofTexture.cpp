@@ -477,6 +477,8 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		glBindTexture(texData.textureTarget,texData.textureID);
 		glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, glFormat, pixelType, 0);  // init to black...
 
+		cout << "glTexImage2D(GL_TEXTURE_XD, 0, " << glInternalFormatString << ", " << texData.tex_w << ", " << texData.tex_h << ", 0," << glFormatString << ", " << pixelTypeString << ", data);" << endl;
+		
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, texData.magFilter);
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, texData.minFilter);
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_S, texData.wrapModeHorizontal);

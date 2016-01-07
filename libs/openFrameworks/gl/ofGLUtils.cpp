@@ -118,10 +118,10 @@ int ofGetGLFormatFromInternal(int glInternalFormat){
 				 return GL_RGBA;
 
 		case GL_RGBA16F:
-				return GL_RGBA16F;
+				return GL_RGBA;
 			
 		case GL_RGBA32F:
-			return GL_RGBA32F;
+			return GL_RGBA;
 			
 			
 		case GL_RGB:

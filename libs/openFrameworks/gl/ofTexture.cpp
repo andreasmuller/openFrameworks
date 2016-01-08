@@ -467,7 +467,7 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		if( pixelType == GL_HALF_FLOAT_OES ) { pixelTypeString = "GL_HALF_FLOAT_OES"; }
 		if( pixelType == GL_UNSIGNED_BYTE ) { pixelTypeString = "GL_UNSIGNED_BYTE"; }
 		
-		//ofLogNotice() << "ofTexture::allocate, glInternalFormat: " << glInternalFormatString << "	glFormat: " << glFormatString << "	pixelType: " << pixelTypeString;
+		ofLogNotice() << "ofTexture::allocate, glInternalFormat: " << glInternalFormatString << "	glFormat: " << glFormatString << "	pixelType: " << pixelTypeString;
 
 //		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " hack for float textures texData.glInternalFormat GL_RGBA32F_EXT/GL_RGBA32F/GL_RGBA16F > GL_RGBA";
 //		if( texData.glInternalFormat == GL_RGBA32F_EXT ) texData.glInternalFormat = GL_RGBA;
@@ -477,7 +477,7 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		glBindTexture(texData.textureTarget,texData.textureID);
 		glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, glFormat, pixelType, 0);  // init to black...
 
-		//cout << "glTexImage2D(GL_TEXTURE_XD, 0, " << glInternalFormatString << ", " << texData.tex_w << ", " << texData.tex_h << ", 0," << glFormatString << ", " << pixelTypeString << ", data);" << endl;
+		cout << "glTexImage2D(GL_TEXTURE_XD, 0, " << glInternalFormatString << ", " << texData.tex_w << ", " << texData.tex_h << ", 0," << glFormatString << ", " << pixelTypeString << ", data);" << endl;
 		
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, texData.magFilter);
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, texData.minFilter);
@@ -575,7 +575,7 @@ void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glForm
 }
 
 //----------------------------------------------------------
-void ofTexture::loadDataFloat(const uint16_t* data, int w, int h, int glFormat) {
+void ofTexture::loadDataFloat(const float* data, int w, int h, int glFormat) {
 	loadData(data, w, h, glFormat, GL_FLOAT);
 }
 #endif
@@ -688,7 +688,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 	if( glType == GL_HALF_FLOAT ) { glTypeString = "GL_HALF_FLOAT"; }
 	if( glType == GL_UNSIGNED_BYTE ) { glTypeString = "GL_UNSIGNED_BYTE"; }
 	
-	//ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
+//	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
 	
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);

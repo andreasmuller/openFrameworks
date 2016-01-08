@@ -573,6 +573,11 @@ void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glForm
 	//loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
 	loadData(data, w, h, glFormat, GL_HALF_FLOAT);
 }
+
+//----------------------------------------------------------
+void ofTexture::loadDataFloat(const uint16_t* data, int w, int h, int glFormat) {
+	loadData(data, w, h, glFormat, GL_FLOAT);
+}
 #endif
 
 //----------------------------------------------------------

@@ -569,7 +569,7 @@ void ofTexture::loadData(const float * data, int w, int h, int glFormat){
 #if TARGET_OS_IOS
 //----------------------------------------------------------
 void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat) {
-	//ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
+	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
 	//loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
 	loadData(data, w, h, glFormat, GL_HALF_FLOAT);
 }

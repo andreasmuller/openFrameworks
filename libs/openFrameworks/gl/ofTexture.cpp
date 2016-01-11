@@ -565,21 +565,13 @@ void ofTexture::loadData(const float * data, int w, int h, int glFormat){
 	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
 	loadData(data, w, h, glFormat, GL_FLOAT);
 }
-
-#if TARGET_OS_IOS
+		
 //----------------------------------------------------------
-void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat) {
+void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat){
 	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
-	//loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
 	loadData(data, w, h, glFormat, GL_HALF_FLOAT);
 }
-
-//----------------------------------------------------------
-void ofTexture::loadDataFloat(const float* data, int w, int h, int glFormat) {
-	loadData(data, w, h, glFormat, GL_FLOAT);
-}
-#endif
-
+		
 //----------------------------------------------------------
 void ofTexture::loadData(const ofPixels & pix){
 	if(!isAllocated()){

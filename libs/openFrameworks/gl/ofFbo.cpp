@@ -870,16 +870,16 @@ int ofFbo::getNumTextures() const {
 //----------------------------------------------------------
 void ofFbo::setActiveDrawBuffer(int i){
 	if(!bIsAllocated) return;
-#ifndef TARGET_OPENGLES
+//#ifndef TARGET_OPENGLES
 	vector<int> activebuffers(1, i);
 	setActiveDrawBuffers(activebuffers);
-#endif
+//#endif
 }
 
 //----------------------------------------------------------
 void ofFbo::setActiveDrawBuffers(const vector<int>& ids){
 	if(!bIsAllocated) return;
-#ifndef TARGET_OPENGLES
+//#ifndef TARGET_OPENGLES
     int numBuffers = activeDrawBuffers.size();
 	activeDrawBuffers.clear();
 	activeDrawBuffers.resize(numBuffers, GL_NONE); // we initialise the vector with GL_NONE, so a buffer will not be written to unless activated.
@@ -894,19 +894,19 @@ void ofFbo::setActiveDrawBuffers(const vector<int>& ids){
         }
     }
     glDrawBuffers(activeDrawBuffers.size(),&activeDrawBuffers[0]);
-#endif
+//#endif
 }
 
 //----------------------------------------------------------
 void ofFbo::activateAllDrawBuffers(){
 	if(!bIsAllocated) return;
-#ifndef TARGET_OPENGLES
+//#ifndef TARGET_OPENGLES
     vector<int> activeBuffers(getNumTextures(),0);
     for(int i=0; i < getNumTextures(); i++){
     	activeBuffers[i] = i;
     }
     setActiveDrawBuffers(activeBuffers);
-#endif
+//#endif
 }
 
 //----------------------------------------------------------

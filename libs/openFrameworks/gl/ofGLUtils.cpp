@@ -112,13 +112,19 @@ int ofGetGLFormatFromInternal(int glInternalFormat){
 	#ifndef TARGET_OPENGLES
 			case GL_RGBA8:
 			case GL_RGBA16:
-			case GL_RGBA16F:
+			//case GL_RGBA16F:
 			case GL_RGBA32F_ARB:
 	#endif
 				 return GL_RGBA;
 
-
-			case GL_RGB:
+		case GL_RGBA16F:
+				return GL_RGBA;
+			
+		case GL_RGBA32F:
+			return GL_RGBA;
+			
+			
+		case GL_RGB:
 	#ifndef TARGET_OPENGLES
 			case GL_RGB8:
 			case GL_RGB16:
@@ -193,11 +199,9 @@ int ofGetGLFormatFromInternal(int glInternalFormat){
 		case GL_BGRA8_EXT:
 			return GL_BGRA;
 
-		case GL_RGBA32F_EXT:
-			
-			ofLogNotice() << "ofGetGLFormatFromInternal got a GL_RGBA32F_EXT which translates to GL_RGBA";
-			
-			return GL_RGBA;
+		//case GL_RGBA32F_EXT:
+		//	ofLogNotice() << "ofGetGLFormatFromInternal got a GL_RGBA32F_EXT or GL_RGBA32F which translates to GL_RGBA";
+		//	return GL_RGBA;
 			
 		case GL_RGB32F_EXT:
 			return GL_RGB;
@@ -279,9 +283,16 @@ int ofGetGlTypeFromInternal(int glInternalFormat){
 		case GL_LUMINANCE_ALPHA32F_EXT:
 			//GL_HALF_FLOAT_OES
 			
-			ofLogNotice() << "ofGetGlTypeFromInternal got a GL_RGBA32F_EXT, GL_RGB32F_EXT, (etc, etc) which translates to GL_HALF_FLOAT_OES";
+			ofLogNotice() << "ofGetGlTypeFromInternal got a GL_RGBA32F_EXT, GL_RGB32F_EXT, (etc, etc) which translates to GL_FLOAT";
 			
-			return GL_HALF_FLOAT_OES; // GL_HALF_FLOAT_OES GL_FLOAT
+			return GL_FLOAT; 
+			
+		case GL_RGBA16F:
+		case GL_RGB16F:
+			
+			ofLogNotice() << "ofGetGlTypeFromInternal got a GL_RGBA16F, GL_RGB16F, (etc, etc) which translates to GL_HALF_FLOAT";
+			
+			return GL_HALF_FLOAT;
 #endif
 
 			

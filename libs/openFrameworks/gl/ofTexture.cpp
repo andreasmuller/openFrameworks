@@ -449,25 +449,36 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		if( texData.glInternalFormat == GL_RGB ) { glInternalFormatString = "GL_RGB"; }
 		if( texData.glInternalFormat == GL_RGB8_OES ) { glInternalFormatString = "GL_RGB8_OES"; }
 		if( texData.glInternalFormat == GL_RGBA32F_EXT ) { glInternalFormatString = "GL_RGBA32F_EXT"; }
+		if( texData.glInternalFormat == GL_RGBA32F ) { glInternalFormatString = "GL_RGBA32F"; }
+		if( texData.glInternalFormat == GL_RGBA16F ) { glInternalFormatString = "GL_RGBA16F"; }
 		
 		
 		string glFormatString = "NOT FOUND";
 		if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
 		if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
+		if( glFormat == GL_RGBA16F ) { glFormatString = "GL_RGBA16F"; }
+		if( glFormat == GL_RGB16F ) { glFormatString = "GL_RGB16F"; }
+		if( glFormat == GL_RGBA32F ) { glFormatString = "GL_RGBA32F"; }
+		if( glFormat == GL_RGB32F ) { glFormatString = "GL_RGB32F"; }
 		
 		string pixelTypeString = "NOT FOUND";
+		if( pixelType == GL_FLOAT ) { pixelTypeString = "GL_FLOAT"; }
+		if( pixelType == GL_HALF_FLOAT ) { pixelTypeString = "GL_HALF_FLOAT"; }
 		if( pixelType == GL_HALF_FLOAT_OES ) { pixelTypeString = "GL_HALF_FLOAT_OES"; }
 		if( pixelType == GL_UNSIGNED_BYTE ) { pixelTypeString = "GL_UNSIGNED_BYTE"; }
 		
-		
 		ofLogNotice() << "ofTexture::allocate, glInternalFormat: " << glInternalFormatString << "	glFormat: " << glFormatString << "	pixelType: " << pixelTypeString;
 
-		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " hack for float textures texData.glInternalFormat GL_RGBA32F_EXT > GL_RGBA";
-		if( texData.glInternalFormat == GL_RGBA32F_EXT ) texData.glInternalFormat = GL_RGBA;
+//		ofLogNotice() << "ofTexture::allocate line " << __LINE__ << " hack for float textures texData.glInternalFormat GL_RGBA32F_EXT/GL_RGBA32F/GL_RGBA16F > GL_RGBA";
+//		if( texData.glInternalFormat == GL_RGBA32F_EXT ) texData.glInternalFormat = GL_RGBA;
+//		if( texData.glInternalFormat == GL_RGBA32F ) texData.glInternalFormat = GL_RGBA;
+//		if( texData.glInternalFormat == GL_RGBA16F ) texData.glInternalFormat = GL_RGBA;
 		
 		glBindTexture(texData.textureTarget,texData.textureID);
 		glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, glFormat, pixelType, 0);  // init to black...
 
+		cout << "glTexImage2D(GL_TEXTURE_XD, 0, " << glInternalFormatString << ", " << texData.tex_w << ", " << texData.tex_h << ", 0," << glFormatString << ", " << pixelTypeString << ", data);" << endl;
+		
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, texData.magFilter);
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, texData.minFilter);
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_S, texData.wrapModeHorizontal);
@@ -555,11 +566,17 @@ void ofTexture::loadData(const float * data, int w, int h, int glFormat){
 	loadData(data, w, h, glFormat, GL_FLOAT);
 }
 
-#ifdef TARGET_OPENGLES
+#if TARGET_OS_IOS
 //----------------------------------------------------------
 void ofTexture::loadDataHalfFloat(const uint16_t* data, int w, int h, int glFormat) {
-	//ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
-	loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
+	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,4,ofGetNumChannelsFromGLFormat(glFormat));
+	//loadData(data, w, h, glFormat, GL_HALF_FLOAT_OES);
+	loadData(data, w, h, glFormat, GL_HALF_FLOAT);
+}
+
+//----------------------------------------------------------
+void ofTexture::loadDataFloat(const float* data, int w, int h, int glFormat) {
+	loadData(data, w, h, glFormat, GL_FLOAT);
 }
 #endif
 
@@ -656,18 +673,22 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
 	
-	/*
+	
 	string glFormatString = "NOT FOUND";
 	if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
 	if( glFormat == GL_RGBA ) { glFormatString = "GL_RGBA"; }
-
+	if( glFormat == GL_RGBA16F ) { glFormatString = "GL_RGBA16F"; }
+	if( glFormat == GL_RGB16F ) { glFormatString = "GL_RGB16F"; }
+	if( glFormat == GL_RGBA32F ) { glFormatString = "GL_RGBA32F"; }
+	if( glFormat == GL_RGB32F ) { glFormatString = "GL_RGB32F"; }
+	
 	string glTypeString = "NOT FOUND";
 	if( glType == GL_FLOAT ) { glTypeString = "GL_FLOAT"; }
 	if( glType == GL_HALF_FLOAT_OES ) { glTypeString = "GL_HALF_FLOAT_OES"; }
+	if( glType == GL_HALF_FLOAT ) { glTypeString = "GL_HALF_FLOAT"; }
 	if( glType == GL_UNSIGNED_BYTE ) { glTypeString = "GL_UNSIGNED_BYTE"; }
 	
-	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
-	*/
+//	ofLogNotice() << "ofTexture::loadData, glFormat: " << glFormatString << "	glType: " << glTypeString;
 	
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);

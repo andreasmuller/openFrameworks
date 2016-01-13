@@ -102,6 +102,8 @@
 		BB24DED110DA7A3F00E9C588 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB16EBD80F2B2AB500518274 /* QuartzCore.framework */; };
 		BB24E0CD10DA9F4800E9C588 /* ofxAccelerometer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB24E02110DA7C6100E9C588 /* ofxAccelerometer.cpp */; };
 		BB24E0DC10DA9F5700E9C588 /* ofxAccelerometer.h in Headers */ = {isa = PBXBuildFile; fileRef = BB24E02210DA7C6100E9C588 /* ofxAccelerometer.h */; };
+		CBA89D411C148DA9008695F5 /* ES3Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CBA89D3F1C148DA9008695F5 /* ES3Renderer.h */; };
+		CBA89D421C148DA9008695F5 /* ES3Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBA89D401C148DA9008695F5 /* ES3Renderer.m */; };
 		E4F76E19176CB27200798745 /* of3dPrimitives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F76D6F176CB27200798745 /* of3dPrimitives.cpp */; };
 		E4F76E1A176CB27200798745 /* of3dPrimitives.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F76D70176CB27200798745 /* of3dPrimitives.h */; };
 		E4F76E1B176CB27200798745 /* of3dUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F76D71176CB27200798745 /* of3dUtils.cpp */; };
@@ -317,6 +319,8 @@
 		BB24E02110DA7C6100E9C588 /* ofxAccelerometer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAccelerometer.cpp; sourceTree = "<group>"; };
 		BB24E02210DA7C6100E9C588 /* ofxAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAccelerometer.h; sourceTree = "<group>"; };
 		BBE5EAB70F49AD8400F28951 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		CBA89D3F1C148DA9008695F5 /* ES3Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES3Renderer.h; sourceTree = "<group>"; };
+		CBA89D401C148DA9008695F5 /* ES3Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES3Renderer.m; sourceTree = "<group>"; };
 		E41D3E9013B38BE900A75A5D /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E41D3E9113B38BE900A75A5D /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = SOURCE_ROOT; };
 		E41D3E9213B38BE900A75A5D /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -484,6 +488,8 @@
 		15594F0015C55A5700727FF2 /* gl */ = {
 			isa = PBXGroup;
 			children = (
+				CBA89D3F1C148DA9008695F5 /* ES3Renderer.h */,
+				CBA89D401C148DA9008695F5 /* ES3Renderer.m */,
 				15594F0815C55AC900727FF2 /* EAGLView.h */,
 				15594F0515C55AC900727FF2 /* EAGLView.m */,
 				15594F0B15C55AC900727FF2 /* ESRenderer.h */,
@@ -929,6 +935,7 @@
 				67833F8419F8990D00DBE7AA /* ofFpsCounter.h in Headers */,
 				E4F76E25176CB27200798745 /* ofAppBaseWindow.h in Headers */,
 				E4F76E2F176CB27200798745 /* ofAppRunner.h in Headers */,
+				CBA89D411C148DA9008695F5 /* ES3Renderer.h in Headers */,
 				E4F76E30176CB27200798745 /* ofBaseApp.h in Headers */,
 				E4F76E37176CB27200798745 /* ofEvents.h in Headers */,
 				E4F76E38176CB27200798745 /* ofEventUtils.h in Headers */,
@@ -1131,6 +1138,7 @@
 				E4F76E96176CB27200798745 /* ofMatrixStack.cpp in Sources */,
 				E4F76E99176CB27200798745 /* ofSystemUtils.cpp in Sources */,
 				E4F76E9B176CB27200798745 /* ofThread.cpp in Sources */,
+				CBA89D421C148DA9008695F5 /* ES3Renderer.m in Sources */,
 				E4F76E9D176CB27200798745 /* ofURLFileLoader.cpp in Sources */,
 				E4F76E9F176CB27200798745 /* ofUtils.cpp in Sources */,
 				E4F76EB5176CB27200798745 /* ofVideoGrabber.cpp in Sources */,

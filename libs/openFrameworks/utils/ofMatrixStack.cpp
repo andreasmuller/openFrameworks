@@ -83,7 +83,12 @@ bool ofMatrixStack::isVFlipped() const{
 }
 
 bool ofMatrixStack::customMatrixNeedsFlip() const{
-	return vFlipped != bool(currentFbo);
+	//return vFlipped != bool(currentFbo);
+
+	// Trying to fix this mess of things flipping around wen you bind an fbo
+	// https://github.com/openframeworks/openFrameworks/issues/3353
+	return vFlipped;
+
 }
 
 int ofMatrixStack::getRenderSurfaceWidth() const{

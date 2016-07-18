@@ -46,6 +46,9 @@ public:
 	void setUseTexture(bool){ /*irrelevant*/ };
 	bool isUsingTexture() const {return true;}
 
+	void doAutoCoordinateFlip( bool _doAutoCoordinateFlip ) { bDoAutoCoordinateFlip = _doAutoCoordinateFlip; }
+	bool doesAutoCoordinateFlip() { return bDoAutoCoordinateFlip; }
+	
 	/// \brief    Sets up the framebuffer and binds it for rendering.
 	/// \warning  This is a convenience method, and is considered unsafe 
 	///           in multi-window and/or multi-renderer scenarios.
@@ -161,6 +164,8 @@ private:
 
 	ofTexture			depthBufferTex;
 
+	bool				bDoAutoCoordinateFlip;
+	
 	static int			_maxColorAttachments;
 	static int			_maxDrawBuffers;
 	static int			_maxSamples;

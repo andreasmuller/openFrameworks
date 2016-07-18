@@ -234,7 +234,8 @@ depthBuffer(0),
 stencilBuffer(0),
 dirty(false),
 defaultTextureIndex(0),
-bIsAllocated(false)
+bIsAllocated(false),
+bDoAutoCoordinateFlip(true)
 {
 #ifdef TARGET_OPENGLES
 	if(!bglFunctionsInitialized){

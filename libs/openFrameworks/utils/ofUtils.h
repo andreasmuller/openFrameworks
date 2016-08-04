@@ -439,7 +439,7 @@ string ofTrimFront(const string & src, const string & locale = "");
 string ofTrimBack(const string & src, const string & locale = "");
 string ofTrim(const string & src, const string & locale = "");
 
-void ofAppendUTF8(string & str, int utf8);
+void ofAppendUTF8(string & str, uint32_t utf8);
 
 /// \brief Convert a variable length argument to a string.
 /// \param format a printf-style format string.
@@ -583,6 +583,13 @@ template<>
 const char * ofFromString(const string & value);
 
 /// \}
+
+template<typename T> T ofTo(const std::string & str){
+	T x;
+	istringstream cur(str);
+	cur >> x;
+	return x;
+}
 
 // --------------------------------------------
 /// \name Number conversion
@@ -904,6 +911,8 @@ string ofSystem(const string& command);
 /// \returns the current ofTargetPlatform.
 ofTargetPlatform ofGetTargetPlatform();
 
+
+std::string ofGetEnv(const std::string & var);
 
 /// Allows to iterate over a string's utf8 codepoints.
 /// The easiest way to use it is with a c++11 range style

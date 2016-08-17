@@ -451,7 +451,8 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		if( texData.glInternalFormat == GL_RGBA32F_EXT ) { glInternalFormatString = "GL_RGBA32F_EXT"; }
 		if( texData.glInternalFormat == GL_RGBA32F ) { glInternalFormatString = "GL_RGBA32F"; }
 		if( texData.glInternalFormat == GL_RGBA16F ) { glInternalFormatString = "GL_RGBA16F"; }
-		
+		if( texData.glInternalFormat == GL_RGB32F ) { glInternalFormatString = "GL_RGB32F"; }
+		if( texData.glInternalFormat == GL_RGB16F ) { glInternalFormatString = "GL_RGB16F"; }
 		
 		string glFormatString = "NOT FOUND";
 		if( glFormat == GL_RGB ) { glFormatString = "GL_RGB"; }
@@ -477,7 +478,7 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 		glBindTexture(texData.textureTarget,texData.textureID);
 		glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, glFormat, pixelType, 0);  // init to black...
 
-		cout << "glTexImage2D(GL_TEXTURE_XD, 0, " << glInternalFormatString << ", " << texData.tex_w << ", " << texData.tex_h << ", 0," << glFormatString << ", " << pixelTypeString << ", data);" << endl;
+		//cout << "glTexImage2D(GL_TEXTURE_XD, 0, " << glInternalFormatString << ", " << texData.tex_w << ", " << texData.tex_h << ", 0," << glFormatString << ", " << pixelTypeString << ", data);" << endl;
 		
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, texData.magFilter);
 		glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, texData.minFilter);

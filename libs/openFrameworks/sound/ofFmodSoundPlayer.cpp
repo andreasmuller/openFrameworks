@@ -217,6 +217,18 @@ bool ofFmodSoundPlayer::load(string fileName, bool stream){
 	result = FMOD_System_CreateSound(sys, fileName.c_str(),  fmodFlags, nullptr, &sound);
 
 	if (result != FMOD_OK){
+		
+		if ( result == FMOD_ERR_FILE_BAD)				{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_FILE_BAD"; }
+		else if ( result == FMOD_ERR_FILE_COULDNOTSEEK)	{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_FILE_COULDNOTSEEK"; }
+		else if ( result == FMOD_ERR_FILE_DISKEJECTED)	{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_FILE_DISKEJECTED"; }
+		else if ( result == FMOD_ERR_FILE_EOF)			{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_FILE_EOF"; }
+		else if ( result == FMOD_ERR_FILE_NOTFOUND)		{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_FILE_NOTFOUND"; }
+		else if ( result == FMOD_ERR_FILE_UNWANTED )	{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_FILE_UNWANTED"; }
+		else if ( result == FMOD_ERR_UNIMPLEMENTED )	{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_UNIMPLEMENTED"; }
+		else if ( result == FMOD_ERR_UNINITIALIZED )	{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_UNINITIALIZED"; }
+		else if ( result == FMOD_ERR_UNSUPPORTED )		{ ofLogError("ofFmodSoundPlayer") << "FMOD_ERR_UNSUPPORTED"; }
+		else { ofLogError("ofFmodSoundPlayer") << "UNKOWN ERROR " << result; }
+		
 		bLoadedOk = false;
 		ofLogError("ofFmodSoundPlayer") << "loadSound(): could not load \"" << fileName << "\"";
 	} else {
